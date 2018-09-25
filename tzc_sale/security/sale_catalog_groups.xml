@@ -7,7 +7,7 @@
             <!-- implies portal group so that customer has portal access -->
             <field name="implied_ids" eval="[(6, 0, [ref('base.group_portal'), ref('base.group_public')])]"/>
             <!-- portal customer can read product template model (so they can see the options); can write to ticket (select) -->
-            <field name="model_access" eval="[(6, 0, [ref('tzc_sale.access_product_product'), ref('tzc_sale.access_sale_catalog'), ref('tzc_sale.access_sale_catalog_line')])]"/>
+            <field name="model_access" eval="[(6, 0, [ref('tzc_sale.access_product_product'), ref('tzc_sale.access_sale_catalog'), ref('tzc_sale.access_sale_catalog_line'), ref('tzc_sale.access_sale_order'), ref('tzc_sale.access_sale_order_line')])]"/>
         </record>
 
         <record id="rule_product_product" model="ir.rule">

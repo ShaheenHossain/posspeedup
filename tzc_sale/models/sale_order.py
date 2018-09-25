@@ -18,15 +18,14 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     catalog_id = fields.Many2one('sale.catalog', ondelete='set null', string='Corresponding Catalog', track_visibility=True)
-    order_line = fields.One2many(track_visibility=False)
+    order_line = fields.One2many(track_visibility='onchange')
     catalog_viewed = fields.Boolean('Catalog Viewed by Customer', default=False)
     # catalog_wizard_id = fields.Many2one('sale.catalog.wizard', ondelete='set null', string='Catalog Wizard')
 
     @api.multi
     def get_access_action(self, access_uid=None):
         """ Instead of the classic form view, redirect to the online order for
-        portal users or if force_website=True in the context. """
-        # TDE note: read access on sales order to portal users granted to followed sales orders
+        portal users or if get_catalog=True in the context. """
         self.ensure_one()
 
         if self.state != 'cancel' and self.env.context.get('get_catalog'):
@@ -39,29 +38,11 @@ class SaleOrder(models.Model):
 
                 return {
                     'type': 'ir.actions.act_url',
-                    # 'url': '/shop/catalog' % self.id,
                     'url': '/shop/catalog',
                     'target': 'self',
                 }
 
-                # try:
-                #     record.check_access_rule('read')
-                # except AccessError:
-                #     return {
-                #         'type': 'ir.actions.act_url',
-                #         # 'url': '/shop/catalog' % self.id,
-                #         'url': '/shop/catalog',
-                #         'target': 'self',
-                #     }
-                # else:
-                #     return {
-                #         'type': 'ir.actions.act_url',
-                #         # 'url': '/shop/catalog/%s?access_token=%s' % (self.id, self.access_token),
-                #         'url': '/shop/catalog'
-                #     }
         return super(SaleOrder, self).get_access_action(access_uid)
-
-
 
     @api.multi
     def _catalog_update(self, product_id=None, line_id=None, add_qty=0, set_qty=0, attributes=None, **kwargs):

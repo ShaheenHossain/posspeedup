@@ -33,8 +33,8 @@ class SaleCatalog(models.Model):
     # product_tmpl_ids = fields.Many2many('product.template', string='Products', help='Products in Current Catalog')
     line_ids = fields.One2many('sale.catalog.line', 'catalog_id', string='Catalog Lines')
 
-    show_price = fields.Boolean('Show Price')
-    show_qty = fields.Boolean('Show Quantity')
+    show_price = fields.Boolean('Show Price', default=True)
+    show_qty = fields.Boolean('Show Quantity', default=True)
 
     order_ids = fields.One2many('sale.order', 'catalog_id', string='Generated SOs')
 

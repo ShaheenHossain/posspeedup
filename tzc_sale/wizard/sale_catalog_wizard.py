@@ -57,8 +57,19 @@ class SaleCatalogWizard(models.TransientModel):
                     })
                 customer_orders[customer_id] = oid
 
-                print('=================================================')
-                print(oid)
+                # create user so that the customer can login to portal
+                # if customer is already a user - make sure they have catalog access right
+                sale_catalog_portal_group_id = self.env.ref('tzc_sale.group_sale_catalog_portal')
+                if not customer_id.user_ids:
+                    res_user_id = self.env['res.users'].sudo().create({
+                        'name': customer_id.name,
+                        'partner_id': customer_id.id,
+                        'login': customer_id.email,
+                        'groups_id': [(6, 0, [sale_catalog_portal_group_id.id])],
+                    })
+                else:
+                    if sale_catalog_portal_group_id.id not in customer_id.mapped('user_ids').mapped('groups_id').mapped('id'):
+                        customer_id.mapped('user_ids').write({'groups_id': [(6, 0, [sale_catalog_portal_group_id.id])]})
 
             ir_model_data = self.env['ir.model.data']
             try:
@@ -70,7 +81,7 @@ class SaleCatalogWizard(models.TransientModel):
             except ValueError:
                 compose_form_id = False
 
-            print('================================================================= preparing context')
+            # print('================================================================= preparing context')
             ctx = {
                 'default_model': 'sale.order',
                 'default_res_id': customer_orders[customer_rep_id].id,
@@ -79,7 +90,7 @@ class SaleCatalogWizard(models.TransientModel):
                 'default_opened_from_catalog': True,
                 # 'default_composition_mode': 'comment',
                 # mark so sent cannot be set for now, since it mess up the website catalog update
-                # 'mark_so_as_sent': True,
+                'mark_so_as_sent': True,
                 'custom_layout': "sale.mail_template_data_notification_email_sale_order",
                 # 'proforma': self.env.context.get('proforma', False),
                 'force_email': True,
