@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import ValidationError, UserError, AccessError
 
 from odoo.http import request
 import logging
@@ -19,8 +19,49 @@ class SaleOrder(models.Model):
 
     catalog_id = fields.Many2one('sale.catalog', ondelete='set null', string='Corresponding Catalog', track_visibility=True)
     order_line = fields.One2many(track_visibility=False)
-    catalog_viewed = fields.Boolean('Catalog Viewed by Selected Customer', default=False)
+    catalog_viewed = fields.Boolean('Catalog Viewed by Customer', default=False)
     # catalog_wizard_id = fields.Many2one('sale.catalog.wizard', ondelete='set null', string='Catalog Wizard')
+
+    @api.multi
+    def get_access_action(self, access_uid=None):
+        """ Instead of the classic form view, redirect to the online order for
+        portal users or if force_website=True in the context. """
+        # TDE note: read access on sales order to portal users granted to followed sales orders
+        self.ensure_one()
+
+        if self.state != 'cancel' and self.env.context.get('get_catalog'):
+            user, record = self.env.user, self
+            if access_uid:
+                user = self.env['res.users'].sudo().browse(access_uid)
+                record = self.sudo(user)
+
+            if self.env.context.get('get_catalog'):
+
+                return {
+                    'type': 'ir.actions.act_url',
+                    # 'url': '/shop/catalog' % self.id,
+                    'url': '/shop/catalog',
+                    'target': 'self',
+                }
+
+                # try:
+                #     record.check_access_rule('read')
+                # except AccessError:
+                #     return {
+                #         'type': 'ir.actions.act_url',
+                #         # 'url': '/shop/catalog' % self.id,
+                #         'url': '/shop/catalog',
+                #         'target': 'self',
+                #     }
+                # else:
+                #     return {
+                #         'type': 'ir.actions.act_url',
+                #         # 'url': '/shop/catalog/%s?access_token=%s' % (self.id, self.access_token),
+                #         'url': '/shop/catalog'
+                #     }
+        return super(SaleOrder, self).get_access_action(access_uid)
+
+
 
     @api.multi
     def _catalog_update(self, product_id=None, line_id=None, add_qty=0, set_qty=0, attributes=None, **kwargs):
@@ -41,7 +82,7 @@ class SaleOrder(models.Model):
             set_qty = 0
         quantity = 0
         order_line = False
-        if self.state != 'draft':
+        if self.state not in ('draft', 'sent'):
             request.session['sale_catalog_order_id'] = None
             raise UserError(_('It is forbidden to modify a sales order which is not in draft status'))
         if line_id is not False:

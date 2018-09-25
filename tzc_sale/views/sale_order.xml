@@ -34,10 +34,26 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='sales_person']/field[@name='analytic_account_id']" position="after">
-                    <field name="catalog_id" attributes="{'invisible': [('catalog_id', '=', False)]}" readonly="1"/>
+                    <field name="catalog_id" attrs="{'invisible': [('catalog_id', '=', False)]}" readonly="1"/>
+                    <field name="catalog_viewed" attrs="{'invisible': [('catalog_id', '=', False)]}" readonly="1"/>
                 </xpath>
             </field>
         </record>
+
+        <record id="view_sale_view_sales_order_filter_inherit_tzc" model="ir.ui.view">
+            <field name="name">sale_view_sales_order_filter_inherit_tzc</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                    <separator/>
+                    <filter string="Catalog Viewed" name="catalog_viewed" domain="[('catalog_viewed','=',True)]"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
 
     </data>
 </odoo>

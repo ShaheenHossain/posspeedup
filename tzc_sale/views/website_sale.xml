@@ -6,7 +6,7 @@
         </xpath>
     </template>
 
-    <template id="header" inherit_id="website.layout" name="Header Shop My catalog Link">
+    <template id="header" inherit_id="website.layout" name="Header Shop My Catalog Link">
         <xpath expr="//header//ul[@id='top_menu']/li" position="before">
             <t t-set="website_catalog_order" t-value="website.sale_get_catalog_order()" />
             <li id="my_catalog" t-att-class="'' if website_catalog_order and website_catalog_order.order_line else 'hidden'">
@@ -49,17 +49,26 @@
                                     <span><t t-esc="name_line"/></span><br/>
                                 </t>
                             </div>
-                            <a href='#' class='js_delete_product hidden-xs no-decoration'> <small><i class='fa fa-trash-o'></i> Remove</small></a>
+                            <t t-if="website_catalog_order.state in ('draft', 'sent')">
+                                <a href='#' class='js_delete_product hidden-xs no-decoration'> <small><i class='fa fa-trash-o'></i> Remove</small></a>
+                            </t>
                         </td>
                         <td class="text-center td-qty">
                             <div class="css_quantity input-group oe_website_spinner">
-                                <a t-attf-href="#" class="mb8 input-group-addon js_add_catalog_json hidden-xs">
-                                    <i class="fa fa-minus"></i>
-                                </a>
-                                <input type="text" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
-                                <a t-attf-href="#" class="mb8 input-group-addon float_left js_add_catalog_json hidden-xs">
-                                    <i class="fa fa-plus"></i>
-                                </a>
+                                <t t-if="website_catalog_order.state in ('draft', 'sent')">
+                                    <a t-attf-href="#" class="mb8 input-group-addon js_add_catalog_json hidden-xs">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+
+                                    <input type="text" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+
+                                    <a t-attf-href="#" class="mb8 input-group-addon float_left js_add_catalog_json hidden-xs">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                    <span t-field="line.product_uom_qty"/>
+                                </t>
                             </div>
                         </td>
                         <!--<td class="text-center td-price" name="price">-->
@@ -98,11 +107,11 @@
                                     <h2 class="mb8 mt8">Catalog</h2>
                                     <t t-call="tzc_sale.catalog_lines" />
                                     <div class="clearfix" />
-                                    <!--<a t-if="not optional_products and website_sale_order and website_sale_order.website_order_line" class="btn btn-primary pull-right mb32 mr8" href="/shop/checkout">-->
-                                        <!--<span class="hidden-xs">Process Checkout</span>-->
-                                        <!--<span class="visible-xs-inline">Checkout</span>-->
+                                    <a t-if="not optional_products and website_catalog_order and website_catalog_order.order_line and website_catalog_order.state in ('draft', 'sent')" class="btn btn-primary pull-right mb32 mr8" href="/shop/catalog/confirm">
+                                        <span class="hidden-xs">Confirm Catalog</span>
+                                        <!--<span class="visible-xs-inline">Confirm</span>-->
                                         <!--<span class="fa fa-long-arrow-right" />-->
-                                    <!--</a>-->
+                                    </a>
                                     <div class="oe_structure" />
                                 </div>
                             </div>

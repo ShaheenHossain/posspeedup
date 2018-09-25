@@ -20,16 +20,15 @@ class Website(models.Model):
     @api.multi
     def sale_get_catalog_order(self):
         """
-        :returns: browse record for the current sales order
+        :returns: browse record for the current catalog order
         """
         self.ensure_one()
         partner = self.env.user.partner_id
 
-        sale_order_ids = self.env['sale.order'].sudo().search([('partner_id', '=', partner.id), ('catalog_id', '!=', 'False'), ('state', 'in', ('draft', 'sent'))])
+        sale_order_ids = self.env['sale.order'].sudo().search([('partner_id', '=', partner.id), ('catalog_id', '!=', False), ('state', 'in', ('draft', 'sent'))])
 
         if sale_order_ids:
             sale_order_id = sale_order_ids[0]
-
             if not request.session.get('sale_catalog_order_id'):
                 request.session['sale_catalog_order_id'] = sale_order_id.id
             return sale_order_id

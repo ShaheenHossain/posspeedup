@@ -14,29 +14,19 @@
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
 <p>Dear ${object.partner_id.name}
-% set access_action = object.with_context(force_website=True).get_access_action()
+% set access_action = object.with_context(get_catalog=True).get_access_action()
 % set is_online = access_action and access_action['type'] == 'ir.actions.act_url'
 % set doc_name = 'quotation' if object.state in ('draft', 'sent') else 'order confirmation'
 % set pay_sign_name =  object.get_portal_confirmation_action()
-% set access_name = is_online and object.state in ('draft', 'sent') and pay_sign_name in ('pay', 'sign') and 'Accept and %s online' % pay_sign_name or 'View %s' % doc_name
-% set access_url = is_online and object.get_mail_url() or ''
+% set access_name = is_online and object.state in ('draft', 'sent') and pay_sign_name in ('pay', 'sign') and 'Select and %s online' % pay_sign_name or 'View %s' % doc_name
+% set access_url = access_action['url'] or ''
 
 % if object.partner_id.parent_id:
     (<i>${object.partner_id.parent_id.name}</i>)
 % endif
 ,</p>
 <p>
-Here is
-% if ctx.get('proforma')
-in attachment, your pro-forma invoice
-% else
-the ${doc_name} <strong>${object.name}</strong>
-% endif
-% if object.origin:
-(with reference: ${object.origin} )
-% endif
-amounting in <strong>${format_amount(object.amount_total, object.currency_id)}</strong>
-from ${object.company_id.name}.
+Here is your Sale Catalog from ${object.company_id.name}.
 </p>
 
 % if is_online and not ctx.get('proforma'):

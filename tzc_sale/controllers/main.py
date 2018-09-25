@@ -75,3 +75,12 @@ class WebsiteSale(http.Controller):
             'suggested_products': []
         })
         return value
+
+
+    @http.route(['/shop/catalog/confirm'], type='http', auth="public", website=True)
+    def confirm_order(self, **post):
+        order = request.website.sale_get_catalog_order()
+        # order.action_confirm()
+        if order.state == 'draft':
+            order.with_context(tracking_disable=True).state = 'sent'
+        return request.redirect("/my/orders/{}".format(str(order.id)))
