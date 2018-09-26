@@ -100,7 +100,6 @@ class SaleOrder(models.Model):
         qty_flag = 0
 
         # Create line if no line with product_id can be located
-
         # This should not happen for catalog unless this universe is actually crazy
         # if not order_line:
         #     values = self._website_product_id_change(self.id, product_id, qty=1)
