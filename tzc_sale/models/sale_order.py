@@ -137,7 +137,7 @@ class SaleOrder(models.Model):
                     values['product_uom_qty'] = available_qty
                     qty_flag = 1
             # del from dic after use
-            if available_qty:
+            if 'product_qty_available' in values:
                 del values['product_qty_available']
 
             if self.pricelist_id.discount_policy == 'with_discount' and not self.env.context.get('fixed_price'):

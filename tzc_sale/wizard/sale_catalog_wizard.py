@@ -69,7 +69,7 @@ class SaleCatalogWizard(models.TransientModel):
                     })
                 else:
                     if sale_catalog_portal_group_id.id not in customer_id.mapped('user_ids').mapped('groups_id').mapped('id'):
-                        customer_id.mapped('user_ids').write({'groups_id': [(6, 0, [sale_catalog_portal_group_id.id])]})
+                        customer_id.mapped('user_ids').write({'groups_id': [(4, sale_catalog_portal_group_id.id, 0)]})
 
             ir_model_data = self.env['ir.model.data']
             try:

@@ -1,4 +1,4 @@
-odoo.define('website_sale.website_sale', function (require) {
+odoo.define('tzc_sale.website_catalog', function (require) {
     "use strict";
 
     require('web.dom_ready');
