@@ -54,6 +54,7 @@
                                         <field name="product_price"/>
                                         <field name="product_price_to_customer"/>
                                         <field name="product_qty"/>
+                                        <field name="product_qty_at_date"/>
                                     </tree>
                                 </field>
                             </page>

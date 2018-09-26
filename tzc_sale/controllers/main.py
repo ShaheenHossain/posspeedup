@@ -36,6 +36,7 @@ class WebsiteSale(http.Controller):
         values.update({
             'website_catalog_order': order,
             'suggested_products': [],
+            'qty_flag': False,
         })
 
         # if post.get('type') == 'popover':
@@ -46,7 +47,7 @@ class WebsiteSale(http.Controller):
 
     @http.route(['/shop/catalog/update'], type='http', auth="public", methods=['POST'], website=True, csrf=False)
     def catalog_update(self, product_id, add_qty=1, set_qty=0, **kw):
-        request.website.sale_get_catalog_order()._catalog_update(
+        value = request.website.sale_get_catalog_order()._catalog_update(
             product_id=int(product_id),
             add_qty=add_qty,
             set_qty=set_qty,
@@ -57,6 +58,7 @@ class WebsiteSale(http.Controller):
     @http.route(['/shop/catalog/update_json'], type='json', auth="public", methods=['POST'], website=True, csrf=False)
     def catalog_update_json(self, product_id, line_id=None, add_qty=None, set_qty=None, display=True):
         order = request.website.sale_get_catalog_order()
+        # this should not happen?
         if order.state not in ('draft', 'sent'):
             request.website.catalog_reset()
             return {}
@@ -72,7 +74,8 @@ class WebsiteSale(http.Controller):
         value['tzc_sale.catalog_lines'] = request.env['ir.ui.view'].render_template("tzc_sale.catalog_lines", {
             'website_catalog_order': order,
             'compute_currency': lambda price: from_currency.compute(price, to_currency),
-            'suggested_products': []
+            'suggested_products': [],
+            'qty_flag': value.get('qty_flag', False)
         })
         return value
 

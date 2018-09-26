@@ -12,7 +12,8 @@ class SaleCatalogLine(models.Model):
     product_uom_id = fields.Many2one('product.uom', related='product_tmpl_id.uom_id', readonly=True)
     product_price = fields.Float('Price', related='product_tmpl_id.list_price', readonly=True)
     product_price_to_customer = fields.Float('Price to Customer')
-    product_qty = fields.Float('Quantity', default=1.0)
+    product_qty = fields.Float('Qty', default=1.0)
+    product_qty_at_date = fields.Float('Qty On Hand', related='product_tmpl_id.product_variant_id.qty_at_date', readonly=True)
 
     # TODO: add sql cosntraints
     # _sql_constrain = False

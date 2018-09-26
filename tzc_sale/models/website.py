@@ -38,3 +38,8 @@ class Website(models.Model):
         request.session.update({
             'sale_catalog_order_id': False,
         })
+
+    # def catalog_qty_error(self):
+    #     request.session.update({
+    #         'catalog_qty_error': True
+    #     })
