@@ -68,7 +68,7 @@ class SaleOrder(models.Model):
             'order_id': order_id,
             'product_uom': product.uom_id.id,
             'price_unit': pu,
-            'product_qty_at_date': product.qty_at_date,
+            'product_qty_available': product.product_tmpl_id.qty_available,
         }
 
     @api.multi
@@ -96,6 +96,8 @@ class SaleOrder(models.Model):
         if line_id is not False:
             order_lines = self._cart_find_product_line(product_id, line_id, **kwargs)
             order_line = order_lines and order_lines[0]
+
+        qty_flag = 0
 
         # Create line if no line with product_id can be located
 
@@ -126,17 +128,17 @@ class SaleOrder(models.Model):
         else:
             # update line
             values = self._website_product_id_change(self.id, product_id, qty=quantity)
-            qty_flag = 0
+
             # check if qty is more than on hand
             requested_qty = values.get('product_uom_qty', False)
-            available_qty = values.get('product_qty_at_date', False)
+            available_qty = values.get('product_qty_available', False)
             if requested_qty:
                 if not available_qty or requested_qty > available_qty:
                     values['product_uom_qty'] = available_qty
                     qty_flag = 1
             # del from dic after use
             if available_qty:
-                del values['product_qty_at_date']
+                del values['product_qty_available']
 
             if self.pricelist_id.discount_policy == 'with_discount' and not self.env.context.get('fixed_price'):
                 order = self.sudo().browse(self.id)
