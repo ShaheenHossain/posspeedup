@@ -59,8 +59,12 @@ class SaleOrder(models.Model):
         product = self.env['product.product'].with_context(product_context).browse(product_id)
         pu = product.price
         if order.pricelist_id and order.partner_id:
+            # print('entering')
             order_line = order._cart_find_product_line(product.id)
+            # print(order_line)
             if order_line:
+                # print('assigning')
+                # pu = order_line.price_unit
                 pu = self.env['account.tax']._fix_tax_included_price_company(pu, product.taxes_id, order_line[0].tax_id, self.company_id)
 
         return {
@@ -142,7 +146,8 @@ class SaleOrder(models.Model):
                 })
                 product = self.env['product.product'].with_context(product_context).browse(product_id)
                 values['price_unit'] = self.env['account.tax']._fix_tax_included_price_company(
-                    order_line._get_display_price(product),
+                    # order_line._get_display_price(product), we don't want the product price but the order_line price
+                    order_line.price_unit,
                     order_line.product_id.taxes_id,
                     order_line.tax_id,
                     self.company_id
