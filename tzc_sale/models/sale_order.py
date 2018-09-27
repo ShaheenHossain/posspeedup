@@ -12,6 +12,7 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     price_unit = fields.Float(track_visibility=True)
+    product_qty_available = fields.Float(related='product_id.product_tmpl_id.qty_available', readonly=True)
 
 
 class SaleOrder(models.Model):
@@ -97,7 +98,8 @@ class SaleOrder(models.Model):
             order_lines = self._cart_find_product_line(product_id, line_id, **kwargs)
             order_line = order_lines and order_lines[0]
 
-        qty_flag = 0
+        # qty_flag = 0
+        # line_qty_available = 0.0
 
         # Create line if no line with product_id can be located
         # This should not happen for catalog unless this universe is actually crazy
@@ -128,17 +130,6 @@ class SaleOrder(models.Model):
             # update line
             values = self._website_product_id_change(self.id, product_id, qty=quantity)
 
-            # check if qty is more than on hand
-            requested_qty = values.get('product_uom_qty', False)
-            available_qty = values.get('product_qty_available', False)
-            if requested_qty:
-                if not available_qty or requested_qty > available_qty:
-                    values['product_uom_qty'] = available_qty
-                    qty_flag = 1
-            # del from dic after use
-            if 'product_qty_available' in values:
-                del values['product_qty_available']
-
             if self.pricelist_id.discount_policy == 'with_discount' and not self.env.context.get('fixed_price'):
                 order = self.sudo().browse(self.id)
                 product_context = dict(self.env.context)
@@ -159,7 +150,7 @@ class SaleOrder(models.Model):
 
             order_line.write(values)
 
-        return {'line_id': order_line.id, 'quantity': quantity, 'qty_flag': qty_flag}
+        return {'line_id': order_line.id, 'quantity': quantity}
 
 
 

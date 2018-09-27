@@ -36,7 +36,6 @@ class WebsiteSale(http.Controller):
         values.update({
             'website_catalog_order': order,
             'suggested_products': [],
-            'qty_flag': False,
         })
 
         # if post.get('type') == 'popover':
@@ -75,7 +74,6 @@ class WebsiteSale(http.Controller):
             'website_catalog_order': order,
             'compute_currency': lambda price: from_currency.compute(price, to_currency),
             'suggested_products': [],
-            'qty_flag': value.get('qty_flag', False)
         })
         return value
 

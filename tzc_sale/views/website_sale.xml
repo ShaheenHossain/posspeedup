@@ -23,15 +23,6 @@
             This catalog is empty!
         </div>
 
-        <t t-if="qty_flag">
-            <div class="alert alert-danger alert-dismissible" role="alert">
-              <strong>Holy guacamole!</strong> Input quantity is greater than our quantity on hand :(
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&amp;times;</span>
-                  </button>
-            </div>
-        </t>
-
         <table class="table table-striped table-condensed js_catalog_lines" id="catalog_products" t-if="website_catalog_order and website_catalog_order.order_line">
             <t t-set="show_price" t-value="website_catalog_order.catalog_id and website_catalog_order.catalog_id.show_price"/>
             <t t-set="show_qty" t-value="website_catalog_order.catalog_id and website_catalog_order.catalog_id.show_qty"/>
@@ -83,6 +74,21 @@
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
+
+                                <t t-if="not line.product_qty_available or line.product_uom_qty > line.product_qty_available">
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <t t-if="line.product_qty_available">
+                                        <small><span t-esc="line.product_qty_available"/> in stock. More on the way!</small>
+                                        </t>
+                                        <t t-else="">
+                                            <small>This item is currently out of stock. </small>
+                                        </t>
+                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&amp;times;</span>
+                                          </button>
+                                    </div>
+                                </t>
+
                             </td>
                         </t>
 
