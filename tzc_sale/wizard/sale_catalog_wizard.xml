@@ -12,7 +12,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box"></div>
                         <group>
-                            <field name="selected_customer_ids" widget="many2many_checkboxes"/>
+                            <field name="selected_customer_ids"/>
                         </group>
                         <field name="template_id" invisible="1"/>
                     </sheet>

@@ -23,6 +23,57 @@ class SaleOrder(models.Model):
     catalog_viewed = fields.Boolean('Catalog Viewed by Customer', default=False)
     # catalog_wizard_id = fields.Many2one('sale.catalog.wizard', ondelete='set null', string='Catalog Wizard')
 
+
+    @api.multi
+    def action_catalog_order_send(self):
+        self.ensure_one()
+
+        ir_model_data = self.env['ir.model.data']
+        try:
+            template_id = ir_model_data.get_object_reference('tzc_sale', 'email_template_catalog_quotation_tzc')[1]
+        except ValueError:
+            template_id = False
+        try:
+            compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
+        except ValueError:
+            compose_form_id = False
+
+        # print('================================================================= preparing context')
+        ctx = {
+            'default_model': 'sale.order',
+            'default_res_id': self.id,
+            'default_use_template': bool(template_id),
+            'default_template_id': template_id,
+            'default_opened_from_catalog': True,
+            # 'default_composition_mode': 'comment',
+            # mark so sent cannot be set for now, since it mess up the website catalog update
+            'mark_so_as_sent': True,
+            'custom_layout': 'sale.mail_template_data_notification_email_sale_order',
+            # 'proforma': self.env.context.get('proforma', False),
+            'force_email': True,
+        }
+
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(compose_form_id, 'form')],
+            'view_id': compose_form_id,
+            'target': 'new',
+            'context': ctx,
+        }
+
+    @api.multi
+    def action_force_catalog_orders_send(self):
+        for order in self:
+            email_act = order.action_catalog_order_send()
+            if email_act and email_act.get('context'):
+                email_ctx = email_act['context']
+                # email_ctx.update(default_email_from=order.company_id.email)
+                order.with_context(email_ctx).message_post_with_template(email_ctx.get('default_template_id'))
+        return True
+
     @api.multi
     def get_access_action(self, access_uid=None):
         """ Instead of the classic form view, redirect to the online order for
