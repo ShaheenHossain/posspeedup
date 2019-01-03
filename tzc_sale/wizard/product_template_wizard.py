@@ -3,6 +3,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
+
 class ProductTemplateWizard(models.TransientModel):
 
     _name = 'product.template.wizard'
@@ -16,7 +17,6 @@ class ProductTemplateWizard(models.TransientModel):
     # catalog_line_ids = fields.Many2many('sale.catalog.line', string='Catalog Line')
 
     catalog_ids = fields.Many2many('sale.catalog', string='Add to Catalog(s)', required=True)
-
 
     @api.multi
     def add_products_to_catalogs(self):

@@ -3,6 +3,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
+
 class SaleCatalogWizard(models.TransientModel):
 
     _name = 'sale.catalog.wizard'
@@ -24,7 +25,8 @@ class SaleCatalogWizard(models.TransientModel):
 
     merge_type = fields.Selection([('merge_to_new', 'Merge to New Catalog'), ('merge_to_old', 'Merge to Existing Catalog')], string='Merge Type')
 
-    # @api.one
+
+    @api.multi
     def open_email_composer(self):
         self.ensure_one()
         if not self.catalog_ids:
@@ -71,42 +73,12 @@ class SaleCatalogWizard(models.TransientModel):
                     if sale_catalog_portal_group_id.id not in customer_id.mapped('user_ids').mapped('groups_id').mapped('id'):
                         customer_id.mapped('user_ids').write({'groups_id': [(4, sale_catalog_portal_group_id.id, 0)]})
 
-            ir_model_data = self.env['ir.model.data']
-            try:
-                template_id = ir_model_data.get_object_reference('tzc_sale', 'email_template_catalog_quotation_tzc')[1]
-            except ValueError:
-                template_id = False
-            try:
-                compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
-            except ValueError:
-                compose_form_id = False
-
-            # print('================================================================= preparing context')
-            ctx = {
-                'default_model': 'sale.order',
-                'default_res_id': customer_orders[customer_rep_id].id,
-                'default_use_template': bool(template_id),
-                'default_template_id': template_id,
-                'default_opened_from_catalog': True,
-                # 'default_composition_mode': 'comment',
-                # mark so sent cannot be set for now, since it mess up the website catalog update
-                'mark_so_as_sent': True,
-                'custom_layout': "sale.mail_template_data_notification_email_sale_order",
-                # 'proforma': self.env.context.get('proforma', False),
-                'force_email': True,
-            }
-
-            return {
-                'type': 'ir.actions.act_window',
-                'view_type': 'form',
-                'view_mode': 'form',
-                'res_model': 'mail.compose.message',
-                'views': [(compose_form_id, 'form')],
-                'view_id': compose_form_id,
-                'target': 'new',
-                'context': ctx,
-            }
-
+            rep_order_id = customer_orders[customer_rep_id]
+            catalog_orders = [o.id for o in list(customer_orders.values())[1:]]
+            res = rep_order_id.action_catalog_order_send()
+            if res and res.get('context') and catalog_orders:
+                res['context']['catalog_orders'] = catalog_orders
+            return res
 
     def _check_valid_merge(self):
         if len(self.catalog_ids) < 2:
@@ -118,7 +90,6 @@ class SaleCatalogWizard(models.TransientModel):
             )
         # todo: if catalog lines have conflicting price and qty, should raise validation error?
         return True
-
 
     @api.multi
     def merge_catalogs(self):

@@ -34,16 +34,17 @@ Here is your Sale Catalog from ${object.company_id.name}.
 % set show_qty = object.catalog_id and object.catalog_id.show_qty
 % set show_price = object.catalog_id and object.catalog_id.show_price
 
-<table class="table">
+<table border="1" cellpadding="10">
     <thead>
         <tr>
-            <th class="text-center">Product</th>
-            <th></th>
+            <th>Product</th>
+            <th>Name</th>
+            <th>Description</th>
 % if show_qty:
-                <th class="text-center">Qty</th>
+                <th>Qty</th>
 % endif
 % if show_price:
-                <th class="text-center">Price</th>
+                <th>Price</th>
 % endif
         </tr>
     </thead>
@@ -51,6 +52,10 @@ Here is your Sale Catalog from ${object.company_id.name}.
     <tbody>
 % for line in object.order_line:
             <tr>
+                <td>
+                    <img src="/web/image?model=product.product&amp;id=${line.product_id.id}&amp;field=image_medium"/>
+
+                </td>
                 <td>
                     <p>${line.product_id.name}</p>
                 </td>
@@ -62,14 +67,14 @@ Here is your Sale Catalog from ${object.company_id.name}.
                     </div>
                 </td>
 % if show_qty:
-                    <td class="text-center">
+                    <td>
                         <p class="css_quantity">
                         ${line.product_uom_qty}
                         <p/>
                     </td>
 % endif
 % if show_price:
-                    <td class="text-center">
+                    <td>
                         <p class="css_quantity">
                         ${line.price_unit}
                         </p>

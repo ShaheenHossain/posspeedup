@@ -10,8 +10,8 @@ class SaleCatalogLine(models.Model):
     product_tmpl_id = fields.Many2one('product.template', ondelete='cascade', string='Product', required=True)
     product_image = fields.Binary('Image', related='product_tmpl_id.image_small', readonly=True)
     product_uom_id = fields.Many2one('product.uom', related='product_tmpl_id.uom_id', readonly=True)
-    product_price = fields.Float('Price', related='product_tmpl_id.list_price', readonly=True)
-    product_price_to_customer = fields.Float('Price to Customer')
+    product_price = fields.Float('MSRP', related='product_tmpl_id.list_price', readonly=True)
+    product_price_to_customer = fields.Float('Your Price')
     product_qty = fields.Float('Qty', default=1.0)
     product_qty_available = fields.Float('Qty On Hand', related='product_tmpl_id.qty_available', readonly=True)
 
