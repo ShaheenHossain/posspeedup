@@ -40,6 +40,6 @@ class ProductTemplateWizard(models.TransientModel):
                 line = self.env['sale.catalog.line'].create({
                     'catalog_id': catalog_id.id,
                     'product_tmpl_id': product_tmpl_id.id,
-                    'product_price_to_customer': product_tmpl_id.list_price
+                    'product_price': product_tmpl_id.list_price
                 })
 

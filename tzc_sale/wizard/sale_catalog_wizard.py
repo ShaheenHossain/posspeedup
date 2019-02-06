@@ -53,7 +53,9 @@ class SaleCatalogWizard(models.TransientModel):
                     self.env['sale.order.line'].create({
                         'order_id': oid.id,
                         'product_id': line_id.product_tmpl_id.product_variant_id.id,
-                        'price_unit': line_id.product_price_to_customer,
+                        'price_unit': line_id.product_price,
+                        'price_wholesale': line_id.product_price_wholesale,
+                        'price_msrp': line_id.product_price_msrp,
                         'product_uom_qty': line_id.product_qty,
                         'product_uom': line_id.product_uom_id.id,
                     })
