@@ -27,9 +27,6 @@
     'author': 'Odoo Inc',
     'version': '0.1',
     'depends': ['sale_stock', 'website_sale', 'website_quote'],
-    'css': [
-        'static/src/css/tanzacan_catalog.css',
-    ],
     'data': [
         'security/ir.model.access.csv',
         'security/sale_catalog_groups.xml',
