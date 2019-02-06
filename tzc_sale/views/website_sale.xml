@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="assets_frontend" inherit_id="website.assets_frontend" name="Catalog">
+    <template id="assets_frontend" inherit_id="website_sale.assets_frontend" name="Catalog">
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/tzc_sale/static/src/js/website_catalog.js"></script>
             <link rel="stylesheet" href="/tzc_sale/static/src/css/tanzacan_catalog.css" />
