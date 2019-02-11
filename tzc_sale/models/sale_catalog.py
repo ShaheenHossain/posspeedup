@@ -9,7 +9,7 @@ class SaleCatalogLine(models.Model):
     catalog_id = fields.Many2one('sale.catalog', ondelete='cascade', string='Catalog', copy=False)
     product_tmpl_id = fields.Many2one('product.template', ondelete='cascade', string='Product', required=True)
     product_image = fields.Binary('Image', related='product_tmpl_id.image', readonly=True)
-    product_image_secondary = fields.Binary('Secondary Image', related='product_tmpl_id.image', readonly=True)
+    product_image_secondary = fields.Binary('Secondary Image', related='product_tmpl_id.image_secondary', readonly=True)
     product_uom_id = fields.Many2one('product.uom', related='product_tmpl_id.uom_id', readonly=True)
     product_price = fields.Float('Our Price')  # this price pull from product list price, but can be modified
     product_price_msrp = fields.Float(related='product_tmpl_id.price_msrp', readonly=True)
