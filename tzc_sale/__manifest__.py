@@ -38,5 +38,6 @@
         'views/sale_order.xml',
         'views/product_template.xml',
         'views/website_sale.xml',
+        'views/sale_portal_templates.xml'
     ],
 }

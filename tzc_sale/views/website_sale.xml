@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="assets_frontend" inherit_id="website.assets_frontend" name="Catalog">
+    <template id="assets_frontend" inherit_id="website_sale.assets_frontend" name="Catalog">
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/tzc_sale/static/src/js/website_catalog.js"></script>
+            <link rel="stylesheet" href="/tzc_sale/static/src/css/tanzacan_catalog.css" />
         </xpath>
     </template>
 
@@ -30,11 +31,13 @@
                 <tr>
                     <th class="td-img">Product</th>
                     <th></th>
+                    <t t-if="show_price">
+                        <th class="text-center td-price">Wholesale Price</th>
+                        <th class="text-center td-price">MSRP</th>
+                        <th class="text-center td-price">Our Price</th>
+                    </t>
                     <t t-if="show_qty">
                         <th class="text-center td-qty">Quantity</th>
-                    </t>
-                    <t t-if="show_price">
-                        <th class="text-center td-price">Price</th>
                     </t>
                 </tr>
             </thead>
@@ -43,7 +46,7 @@
                     <tr>
                         <td colspan="2" t-if="not line.product_id.product_tmpl_id" class='td-img'></td>
                         <td align="center" t-if="line.product_id.product_tmpl_id" class='td-img'>
-                            <span t-field="line.product_id.image_small" t-options="{'widget': 'image', 'class': 'img-rounded'}" />
+                            <span t-field="line.product_id.image" t-options="{'widget': 'image', 'class': 'product_detail_img'}" />
                         </td>
                         <td t-if="line.product_id.product_tmpl_id" class='td-product_name'>
                             <div>
@@ -60,6 +63,33 @@
                             <a href='#' class='js_delete_product hidden-xs no-decoration'> <small><i class='fa fa-trash-o'></i> Remove</small></a>
 
                         </td>
+
+                        <t t-if="show_price">
+                            <td class="text-center td-price" name="wholesale_price">
+                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
+                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
+                                <!--</t>-->
+                                <!--<span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />-->
+                                <!--<span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />-->
+                                <span t-field="line.price_wholesale" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>
+                            </td>
+                            <td class="text-center td-price" name="msrp_price">
+                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
+                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
+                                <!--</t>-->
+                                <!--<span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />-->
+                                <!--<span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />-->
+                                <span t-field="line.price_msrp" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>
+                            </td>
+                            <td class="text-center td-price" name="price">
+                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
+                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
+                                <!--</t>-->
+                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />
+                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />
+                                <!--<span t-field="line.price_unit" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>-->
+                            </td>
+                        </t>
 
                         <t t-if="show_qty">
                             <td class="text-center td-qty">
@@ -91,18 +121,6 @@
 
                             </td>
                         </t>
-
-                        <t t-if="show_price">
-                            <td class="text-center td-price" name="price">
-                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
-                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
-                                <!--</t>-->
-                                <!--todo not sure what price to show here?-->
-                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />
-                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />
-                                <!--<span t-field="line.price_unit" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>-->
-                            </td>
-                        </t>
                     </tr>
                 </t>
             </tbody>
@@ -129,13 +147,11 @@
                             <div class="row">
                                 <div class="col-md-12 o_website_sale_rightfit">
                                     <h2 class="mb8 mt8">Catalog</h2>
-                                    <t t-call="tzc_sale.catalog_lines" />
                                     <div class="clearfix" />
                                     <a t-if="not optional_products and website_catalog_order and website_catalog_order.order_line and website_catalog_order.state in ('draft', 'sent')" class="btn btn-primary pull-right mb32 mr8" href="/shop/catalog/confirm">
                                         <span class="hidden-xs">Confirm Catalog</span>
-                                        <!--<span class="visible-xs-inline">Confirm</span>-->
-                                        <!--<span class="fa fa-long-arrow-right" />-->
                                     </a>
+                                    <t t-call="tzc_sale.catalog_lines" />
                                     <div class="oe_structure" />
                                 </div>
                             </div>

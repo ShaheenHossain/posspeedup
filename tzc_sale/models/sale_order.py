@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 from odoo.http import request
 import logging
+from odoo.addons import decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 
@@ -12,8 +13,18 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     price_unit = fields.Float(track_visibility=True)
-    product_qty_available = fields.Float(related='product_id.product_tmpl_id.qty_available', readonly=True)
 
+    price_wholesale = fields.Float(
+        'Wholesale Price',
+        digits=dp.get_precision('Product Price'),
+        help="Wholesale Price")
+
+    price_msrp = fields.Float(
+        'MSRP',
+        digits=dp.get_precision('Product Price'),
+        help="MSRP Price")
+
+    product_qty_available = fields.Float(related='product_id.product_tmpl_id.qty_available', readonly=True)
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'

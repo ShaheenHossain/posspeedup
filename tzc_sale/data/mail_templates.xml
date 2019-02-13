@@ -44,6 +44,8 @@ Here is your Sale Catalog from ${object.company_id.name}.
                 <th>Qty</th>
 % endif
 % if show_price:
+                <th>Wholesale Price</th>
+                <th>MSRP</th>
                 <th>Price</th>
 % endif
         </tr>
@@ -74,6 +76,16 @@ Here is your Sale Catalog from ${object.company_id.name}.
                     </td>
 % endif
 % if show_price:
+                    <td>
+                        <p class="css_quantity">
+                        ${line.price_wholesale}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="css_quantity">
+                        ${line.price_msrp}
+                        </p>
+                    </td>
                     <td>
                         <p class="css_quantity">
                         ${line.price_unit}

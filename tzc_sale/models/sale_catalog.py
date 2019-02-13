@@ -8,22 +8,20 @@ class SaleCatalogLine(models.Model):
 
     catalog_id = fields.Many2one('sale.catalog', ondelete='cascade', string='Catalog', copy=False)
     product_tmpl_id = fields.Many2one('product.template', ondelete='cascade', string='Product', required=True)
-    product_image = fields.Binary('Image', related='product_tmpl_id.image_small', readonly=True)
+    product_image = fields.Binary('Image', related='product_tmpl_id.image', readonly=True)
+    product_image_secondary = fields.Binary('Secondary Image', related='product_tmpl_id.image_secondary', readonly=True)
     product_uom_id = fields.Many2one('product.uom', related='product_tmpl_id.uom_id', readonly=True)
-    product_price = fields.Float('MSRP', related='product_tmpl_id.list_price', readonly=True)
-    product_price_to_customer = fields.Float('Your Price')
+    product_price = fields.Float('Our Price')  # this price pull from product list price, but can be modified
+    product_price_msrp = fields.Float(related='product_tmpl_id.price_msrp', readonly=True)
+    product_price_wholesale = fields.Float(related='product_tmpl_id.price_wholesale', readonly=True)
     product_qty = fields.Float('Qty', default=1.0)
     product_qty_available = fields.Float('Qty On Hand', related='product_tmpl_id.qty_available', readonly=True)
 
-    # TODO: add sql cosntraints
-    # _sql_constrain = False
 
-    @api.model
-    def create(self, vals):
-        rid = super(SaleCatalogLine, self).create(vals)
-        if not rid.product_price_to_customer and rid.product_price:
-            rid.product_price_to_customer = rid.product_price
-        return rid
+    # @api.model
+    # def create(self, vals):
+    #     rid = super(SaleCatalogLine, self).create(vals)
+    #     return rid
 
 
 class SaleCatalog(models.Model):
