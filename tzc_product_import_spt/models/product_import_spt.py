@@ -211,6 +211,8 @@ class product_import_spt(models.Model):
                                         'image_secondary':base64.encodestring(remote_image2.read()),
                                     })
             record.product_ids = [(6,0,product_ids)]
+            for tmpl_pro in record.product_ids:
+                product_pro_obj.search([('product_tmpl_id','=',tmpl_pro.id),('default_code','in',[False, ' ', ''])]).unlink()
             record.state = 'done'
 
     @api.multi
