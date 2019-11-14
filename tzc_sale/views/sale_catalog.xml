@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="action_view_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="res_model">sale.order</field>
+            <field name="domain">[('catalog_id', '=', active_id)]</field>
+            <field name="context">{'default_catalog_id': active_id}</field>
+        </record>
+
+        <!-- Product Catalog form view -->
+        <record id="view_sale_catalog_form" model="ir.ui.view">
+            <field name="name">sale_catalog_form_view</field>
+            <field name="model">sale.catalog</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="%(action_send_catalogs_to_customers)d" string="Send Catalog to Customers" type="action" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="action" name="%(action_view_quotations)d" icon="fa-pencil-square-o">
+                                <div class="o_stat_info">
+                                    <field name="sale_order_count" class="o_stat_value"/>
+                                    <span class="o_stat_text"> Sale Order(s) </span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" type="object" name="toggle_active" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="0"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="show_price"/>
+                                <field name="show_qty"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="catalog_lines" string="Catalog Lines">
+                                <field name="line_ids" mode="tree">
+                                    <tree editable="bottom" create="1" string="Catalog Lines">
+                                        <field name="product_image" widget="image" options="{'size': [240, 120]}"/>
+                                        <field name="product_image_secondary" widget="image" options="{'size': [240, 120]}"/>
+                                        <field name="product_tmpl_id" style="font-weight: bold;"/>
+                                        <field name="product_uom_id" style="font-weight: bold;"/>
+                                        <field name="product_price_wholesale" style="font-weight: bold;"/>
+                                        <field name="product_price_msrp" style="font-weight: bold;"/>
+                                        <field name="product_price" style="font-weight: bold;"/>
+                                        <field name="product_qty" style="font-weight: bold;"/>
+                                        <field name="product_qty_available" style="font-weight: bold;"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Product Catalog tree view -->
+        <record id="view_sale_catalog_tree" model="ir.ui.view">
+            <field name="name">sale_catalog_tree_view</field>
+            <field name="model">sale.catalog</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- Product Catalog search view -->
+        <record id="view_sale_catalog_search" model="ir.ui.view">
+            <field name="name">sale_catalog_search_view</field>
+            <field name="model">sale.catalog</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <separator/>
+                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

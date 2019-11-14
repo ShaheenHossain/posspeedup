@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend" inherit_id="website_sale.assets_frontend" name="Catalog">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/tzc_sale/static/src/js/website_catalog.js"></script>
+            <link rel="stylesheet" href="/tzc_sale/static/src/css/tanzacan_catalog.css" />
+        </xpath>
+    </template>
+
+    <template id="header" inherit_id="website.layout" name="Header Shop My Catalog Link">
+        <xpath expr="//header//ul[@id='top_menu']/li" position="before">
+            <t t-set="website_catalog_order" t-value="website.sale_get_catalog_order()" />
+            <li id="my_catalog" t-att-class="'' if website_catalog_order and website_catalog_order.order_line else 'hidden'">
+                <a href="/shop/catalog">
+                    <i class="fa fa-list"></i>
+                    My Catalog <sup t-attf-class="label label-primary"/>
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <!--id="add_to_cart"-->
+    <template id="product" inherit_id="website_sale.product">
+        <xpath expr="//section[1]/div[1]" position="attributes">
+            <attribute name="t-if">not from_catalog</attribute>
+        </xpath>
+
+        <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
+            <attribute name="t-if">not from_catalog</attribute>
+        </xpath>
+
+        <xpath expr="//form[@action='/shop/cart/update']" position="after">
+            <a t-if="from_catalog" href="/shop/catalog" class="btn btn-primary">
+               <i class="fa fa-arrow-right"></i>
+                Select Qty in Catalog
+            </a>
+        </xpath>
+
+
+    </template>
+
+    <template id="catalog_lines" name="Shopping catalog Lines">
+        <div t-if="not website_catalog_order or not website_catalog_order.order_line" class="js_catalog_lines well well-lg">
+            This catalog is empty!
+        </div>
+
+        <table class="table table-striped table-condensed js_catalog_lines" id="catalog_products" t-if="website_catalog_order and website_catalog_order.order_line">
+            <t t-set="show_price" t-value="website_catalog_order.catalog_id and website_catalog_order.catalog_id.show_price"/>
+            <t t-set="show_qty" t-value="website_catalog_order.catalog_id and website_catalog_order.catalog_id.show_qty"/>
+            <thead>
+                <tr>
+                    <th class="td-img">Product</th>
+                    <th></th>
+                    <t t-if="show_price">
+                        <th class="text-center td-price">Wholesale Price</th>
+                        <th class="text-center td-price">MSRP</th>
+                        <th class="text-center td-price">Our Price</th>
+                    </t>
+                    <t t-if="show_qty">
+                        <th class="text-center td-qty">Quantity</th>
+                    </t>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-foreach="website_catalog_order.order_line" t-as="line">
+                    <tr>
+                        <td colspan="2" t-if="not line.product_id.product_tmpl_id" class='td-img'></td>
+
+                        <!-- not sure why but following the convention from the cart line views-->
+                        <t t-if="line.product_id.product_tmpl_id">
+                            <td align="center" class='td-img'>
+                                <div>
+                                    <div class="col-md-6">
+                                        <span t-field="line.product_image" t-options="{'widget': 'image', 'class': 'product_detail_img'}" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span t-field="line.product_image_secondary" t-options="{'widget': 'image', 'class': 'product_detail_img'}" />
+                                    </div>
+                                </div>
+                            </td>
+                            <!--<td align="center" class='td-img'>-->
+                                <!--<span t-field="line.product_id.image_secondary" t-options="{'widget': 'image', 'class': 'product_detail_img'}" />-->
+                            <!--</td>-->
+
+                            <td class='td-product_name'>
+                                <div>
+                                    <a t-attf-href="/shop/catalog/product/#{ slug(line.product_id.product_tmpl_id) }">
+                                        <strong t-esc="line.product_id.with_context(display_default_code=False).display_name" />
+                                    </a>
+                                </div>
+                                <div class="text-muted hidden-xs small">
+                                    <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                                        <span><t t-esc="name_line"/></span><br/>
+                                    </t>
+                                </div>
+
+                                <a href='#' class='js_delete_product hidden-xs no-decoration'> <small><i class='fa fa-trash-o'></i> Remove</small></a>
+
+                            </td>
+                        </t>
+
+
+                        <t t-if="show_price">
+                            <td class="text-center td-price" name="wholesale_price">
+                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
+                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
+                                <!--</t>-->
+                                <!--<span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />-->
+                                <!--<span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />-->
+                                <span t-field="line.price_wholesale" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>
+                            </td>
+                            <td class="text-center td-price" name="msrp_price">
+                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
+                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
+                                <!--</t>-->
+                                <!--<span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />-->
+                                <!--<span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />-->
+                                <span t-field="line.price_msrp" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>
+                            </td>
+                            <td class="text-center td-price" name="price">
+                                <!--<t t-if="(compute_currency(line.product_id.lst_price) - line.price_reduce ) &gt; 0.01">-->
+                                    <!--<del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />-->
+                                <!--</t>-->
+                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />
+                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />
+                                <!--<span t-field="line.price_unit" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_catalog_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"/>-->
+                            </td>
+                        </t>
+
+                        <t t-if="show_qty">
+                            <td class="text-center td-qty">
+                                <div class="css_quantity input-group oe_website_spinner">
+                                    <a t-attf-href="#" class="mb8 input-group-addon js_add_catalog_json hidden-xs">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+
+                                    <input type="text" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+
+                                    <a t-attf-href="#" class="mb8 input-group-addon float_left js_add_catalog_json hidden-xs">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </div>
+
+                                <t t-if="not line.product_qty_available or line.product_uom_qty > line.product_qty_available">
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <t t-if="line.product_qty_available">
+                                        <small><span t-esc="line.product_qty_available"/> in stock. More on the way!</small>
+                                        </t>
+                                        <t t-else="">
+                                            <small>This item is currently out of stock. </small>
+                                        </t>
+                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&amp;times;</span>
+                                          </button>
+                                    </div>
+                                </t>
+
+                            </td>
+                        </t>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+        <div class="js_catalog_lines row">
+            <t t-call="website_sale.total">
+                <t t-set='extra_class' t-value='"col-xs-12 col-sm-5 col-sm-push-7"'/>
+                <t t-set='redirect'>/shop/catalog</t>
+            </t>
+        </div>
+    </template>
+
+    <template id="catalog" name="Sales Catalog">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container oe_website_sale">
+                    <div class="row">
+                        <div class="col-md-12 oe_catalog">
+                        <!-- <div class="col-md-8 col-md-offset-2 oe_catalog"> -->
+                            <!--<div class="row">-->
+                                <!--<t t-call="website_sale.wizard_checkout">-->
+                                    <!--<t t-set="step" t-value="10" />-->
+                                <!--</t>-->
+                            <!--</div>-->
+                            <div class="row">
+                                <div class="col-md-12 o_website_sale_rightfit">
+                                    <h2 class="mb8 mt8">Catalog</h2>
+                                    <div class="clearfix" />
+                                    <a t-if="not optional_products and website_catalog_order and website_catalog_order.order_line and website_catalog_order.state in ('draft', 'sent')" class="btn btn-primary pull-right mb32 mr8" href="/shop/catalog/confirm">
+                                        <span class="hidden-xs">Confirm Catalog</span>
+                                    </a>
+                                    <t t-call="tzc_sale.catalog_lines" />
+                                    <div class="oe_structure" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure" />
+            </div>
+        </t>
+    </template>
+</odoo>

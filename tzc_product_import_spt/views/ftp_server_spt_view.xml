@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data>
+
+		<record id="ftp_server_form_view_spt" model="ir.ui.view">
+			<field name="name">ftp.server.form.view.spt</field>
+			<field name="model">ftp.server.spt</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<field name="state" widget='statusbar'/>
+						<button name="test_connection" string="Test Connection" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirm')]}"/>
+						<button name="set_to_draft" string="Reset To Draft" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+					</header>
+					<sheet>
+                        <group>
+                            <field name="name" required='1'/>
+                            <field name="server_ip" required='1'/>
+                            <field name="server_user" required='1'/>
+                            <field name="server_password" password='True' required='1'/>
+                            <field name="server_port" required='1'/>
+						</group>
+                    </sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="ftp_server_tree_view_spt" model="ir.ui.view">
+			<field name="name">ftp.server.tree.view.spt</field>
+			<field name="model">ftp.server.spt</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" />
+					<field name="server_ip" />
+					<field name="server_user" />
+					<field name="server_password" password='True'/>
+					<field name="server_port" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_ftp_server_spt" model="ir.actions.act_window">
+			<field name="name">FTP Server</field>
+			<field name="res_model">ftp.server.spt</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem id="menu_ftp_server_spt" name="FTP Servers" action="action_ftp_server_spt" parent='menu_main_product_import_spt'/>
+
+	</data>
+</odoo>
