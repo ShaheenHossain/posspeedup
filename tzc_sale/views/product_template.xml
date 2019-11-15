@@ -44,13 +44,13 @@
                     <field name="image" widget='image' options="{'size': [340, 220]}"/>
                     <field name="image_secondary" widget='image' options="{'size': [340, 220]}"/>
                 </xpath>
-                <xpath expr="//field[@name='name']" position="after">
+                <xpath expr="//field[@name='attribute_value_ids']" position="after">
                     <field name="price_wholesale" />
                     <field name="price_msrp" />
                 </xpath>
-                <xpath expr="//field[@name='attribute_value_ids']" position="attributes">
+                <!-- <xpath expr="//field[@name='attribute_value_ids']" position="attributes">
                     <attribute name="invisible">0</attribute>
-                </xpath>
+                </xpath> -->
 
                 <xpath expr="//field[@name='virtual_available']" position="attributes">
                     <attribute name="invisible">1</attribute>
