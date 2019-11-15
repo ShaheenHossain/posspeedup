@@ -7,8 +7,8 @@
             <field name="inherit_id" ref="product.product_template_tree_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="before">
-                    <field name="image" widget="image" options="{'size': [240, 120]}"/>
-                    <field name="image_secondary" widget="image" options="{'size': [240, 120]}"/>
+                    <field name="image" widget="image" options="{'size': [340, 220]}"/>
+                    <field name="image_secondary" widget="image" options="{'size': [340, 220]}"/>
                 </xpath>
                 <xpath expr="//field[@name='list_price']" position="before">
                     <field name="price_wholesale"/>
@@ -41,14 +41,20 @@
             <field name="inherit_id" ref="product.product_product_tree_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="before">
-                    <field name="image" widget='image' options="{'size': [240, 120]}"/>
-                    <field name="image_secondary" widget='image' options="{'size': [240, 120]}"/>
+                    <field name="image" widget='image' options="{'size': [340, 220]}"/>
+                    <field name="image_secondary" widget='image' options="{'size': [340, 220]}"/>
                 </xpath>
                 <xpath expr="//field[@name='name']" position="after">
                     <field name="price_wholesale" />
                     <field name="price_msrp" />
                 </xpath>
                 <xpath expr="//field[@name='attribute_value_ids']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='type']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='virtual_available']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//field[@name='barcode']" position="attributes">
