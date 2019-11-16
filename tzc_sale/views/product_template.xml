@@ -83,7 +83,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_image_ids']/.." position="replace">
                     <page string="Images">
-                        <group>
                             <group>
                                 <label for="image" string="Main Image"/>
                                 <div name="image">
@@ -96,7 +95,6 @@
                                     <field name="image_secondary" widget="image" nolabel='1'/>
                                 </div>
                             </group>
-                        </group>
                         <label for="product_image_ids" string="Additional Images" groups="website_sale.group_website_multi_image"/>
                         <div name="product_image_ids" groups="website_sale.group_website_multi_image">
                             <field name="product_image_ids" mode="tree" context="{'default_name': name, 'default_product_tmpl_id': active_id}">
