@@ -12,7 +12,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box"></div>
                         <group>
-                            <field name="product_tmpl_ids" widget="many2many_tags" readonly="1"/>
+                            <field name="product_pro_ids" widget="many2many_tags" readonly="1"/>
                             <field name="catalog_ids" mode="tree,form">
                                 <form>
                                     <group>
@@ -33,7 +33,7 @@
 
         <act_window id="action_add_products_to_catalogs"
                 name="Add to Catalog"
-                src_model="product.template"
+                src_model="product.product"
                 res_model="product.template.wizard"
                 target="new"
                 view_id="wizard_add_products_to_catalogs"

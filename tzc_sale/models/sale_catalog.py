@@ -7,15 +7,18 @@ class SaleCatalogLine(models.Model):
     _name = 'sale.catalog.line'
 
     catalog_id = fields.Many2one('sale.catalog', ondelete='cascade', string='Catalog', copy=False)
-    product_tmpl_id = fields.Many2one('product.template', ondelete='cascade', string='Product', required=True)
-    product_image = fields.Binary('Image', related='product_tmpl_id.image', readonly=True)
-    product_image_secondary = fields.Binary('Secondary Image', related='product_tmpl_id.image_secondary', readonly=True)
-    product_uom_id = fields.Many2one('product.uom', related='product_tmpl_id.uom_id', readonly=True)
+    product_tmpl_id = fields.Many2one('product.template', ondelete='cascade', string='Product')
+
+    product_pro_id = fields.Many2one('product.product', ondelete='cascade', string='Product', required=True)
+    
+    product_image = fields.Binary('Image', related='product_pro_id.image', readonly=True)
+    product_image_secondary = fields.Binary('Secondary Image', related='product_pro_id.image_secondary', readonly=True)
+    product_uom_id = fields.Many2one('product.uom', related='product_pro_id.uom_id', readonly=True)
     product_price = fields.Float('Our Price')  # this price pull from product list price, but can be modified
-    product_price_msrp = fields.Float(related='product_tmpl_id.price_msrp', readonly=True)
-    product_price_wholesale = fields.Float(related='product_tmpl_id.price_wholesale', readonly=True)
+    product_price_msrp = fields.Float(related='product_pro_id.price_msrp', readonly=True)
+    product_price_wholesale = fields.Float(related='product_pro_id.price_wholesale', readonly=True)
     product_qty = fields.Float('Qty', default=1.0)
-    product_qty_available = fields.Float('Qty On Hand', related='product_tmpl_id.qty_available', readonly=True)
+    product_qty_available = fields.Float('Qty On Hand', related='product_pro_id.qty_available', readonly=True)
 
 
     # @api.model
@@ -30,6 +33,7 @@ class SaleCatalog(models.Model):
     name = fields.Char('Catalog Name', required=True)
     description = fields.Text('Description')
     # product_tmpl_ids = fields.Many2many('product.template', string='Products', help='Products in Current Catalog')
+    product_pro_ids = fields.Many2many('product.product', 'product_pro_catalog_rel_spt', 'catalog_id', 'product_pro_id', string='Products')
     line_ids = fields.One2many('sale.catalog.line', 'catalog_id', string='Catalog Lines')
 
     show_price = fields.Boolean('Show Price', default=True)

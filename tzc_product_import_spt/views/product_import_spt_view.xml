@@ -58,6 +58,8 @@
 										<field name='categ_id' />
 										<field name='image_1' />
 										<field name='image_2' />
+										<field name='image_1_url' />
+										<field name='image_2_url' />
 									</tree>
 								</field>
 							</page>

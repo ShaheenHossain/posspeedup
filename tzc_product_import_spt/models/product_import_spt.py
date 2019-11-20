@@ -209,6 +209,8 @@ class product_import_spt(models.Model):
                                         'categ_id':categ_obj.search([('name','=',variant.categ_id)],limit=1).id or categ_obj.create({'name':variant.categ_id}).id,
                                         'image':base64.encodestring(remote_image1.read()),
                                         'image_secondary':base64.encodestring(remote_image2.read()),
+                                        'image_url':variant.image_1_url or '',
+                                        'image_secondary_url':variant.image_2_url or '',
                                     })
             record.product_ids = [(6,0,product_ids)]
             for tmpl_pro in record.product_ids:
@@ -244,6 +246,8 @@ class product_import_spt(models.Model):
                             'categ_id':line[14],
                             'image_1':line[15],
                             'image_2':line[16][:len(line[16])],
+                            'image_1_url':line[17],
+                            'image_2_url':line[18],
                         }))
                 record.import_line_ids = import_line_list
                 record.state = 'process'

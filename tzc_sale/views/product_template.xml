@@ -35,7 +35,7 @@
             </field>
         </record>
 
-        <record id="tzc_product_product_inherit_tree_view_spt" model="ir.ui.view">
+        <!-- <record id="tzc_product_product_inherit_tree_view_spt" model="ir.ui.view">
             <field name="name">tzc.product.product.inherit.tree.view.spt</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_product_tree_view"/>
@@ -48,9 +48,6 @@
                     <field name="price_wholesale" />
                     <field name="price_msrp" />
                 </xpath>
-                <!-- <xpath expr="//field[@name='attribute_value_ids']" position="attributes">
-                    <attribute name="invisible">0</attribute>
-                </xpath> -->
 
                 <xpath expr="//field[@name='virtual_available']" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -63,7 +60,7 @@
                     <field name="type" invisible='1'/>
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
         <record id="view_product_product_template_search_inherit_tzc" model="ir.ui.view">
             <field name="name">product_product_template_search_inherit_tzc</field>

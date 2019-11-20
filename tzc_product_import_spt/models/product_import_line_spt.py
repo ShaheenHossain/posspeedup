@@ -25,6 +25,8 @@ class product_import_line_spt(models.Model):
     categ_id = fields.Char('Categ')
     image_1 = fields.Char('Image1')
     image_2 = fields.Char('Image2')
+    image_1_url = fields.Char('Image1 URL')
+    image_2_url = fields.Char('Image2 URL')
 
     import_id = fields.Many2one('product.import.spt', 'Product Import')
     
