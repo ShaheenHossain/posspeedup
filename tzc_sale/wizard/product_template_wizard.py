@@ -9,13 +9,13 @@ class ProductTemplateWizard(models.TransientModel):
     _name = 'product.template.wizard'
 
     # explicitly pass in context
-    def _default_products(self):
-        return self.env['product.template'].browse(self.env.context.get('active_ids'))
+    # def _default_products(self):
+    #     return self.env['product.template'].browse(self.env.context.get('active_ids'))
     
     def _default_product_product(self):
         return self.env['product.product'].browse(self.env.context.get('active_ids'))
 
-    product_tmpl_ids = fields.Many2many('product.template', string="Selected Products", required=True, default=_default_products)
+    # product_tmpl_ids = fields.Many2many('product.template', string="Selected Products", required=True, default=_default_products)
 
     product_pro_ids = fields.Many2many('product.product', 'product_product_template_wizard_rel_spt', 'wizard_id' , 'product_pro_id', string="Selected Products", required=True, default=_default_product_product)
 

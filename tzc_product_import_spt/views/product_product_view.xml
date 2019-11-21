@@ -32,6 +32,32 @@
                     <field name="categ_id" />
                     <field name="type" invisible='1'/>
                 </xpath>
+                <tree position="attributes">
+                    <attribute name="decoration-info">number_of_variant&gt;1</attribute>
+                    <!-- <attribute name="decoration-success">number_of_variant&gt;1</attribute> -->
+                </tree>
+            </field>
+        </record>
+
+        <record id="tzc_product_product_inherit_form_view_spt" model="ir.ui.view">
+            <field name="name">tzc.product.product.inherit.form.view.spt</field>
+            <field name="model">product.product</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='website_publish_button']" position="after">
+                    <button name="action_open_variant_spt" type="object" icon="fa-sitemap" class="oe_stat_button" >
+                        <field string="Variants" name="product_variant_count" widget="statinfo" />
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='image']" position="after">
+                    <label for='image_url' style="font-weight: bold;"/>
+                    <field name='image_url' />
+                </xpath>
+                <xpath expr="//field[@name='image_secondary']" position="after">
+                    <label for='image_secondary_url' style="font-weight: bold;"/>
+                    <field name='image_secondary_url' />
+                </xpath>
             </field>
         </record>
 

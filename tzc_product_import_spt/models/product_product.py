@@ -34,3 +34,11 @@ class product_product(models.Model):
                 'target': 'new',
                 'url': self.image_secondary_url,
             }
+
+    @api.multi
+    def action_open_variant_spt(self):
+        for record in self:
+            # print(record.product_tmpl_id.env.ref('product.product_variant_action').read()[0])
+            vals = self.env.ref('product.product_variant_action').read()[0]
+            vals.update({'context':vals['context'].replace('active_id',str(record.product_tmpl_id.id))}) 
+            return vals
