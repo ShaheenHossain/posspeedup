@@ -15,6 +15,7 @@ class product_import_line_spt(models.Model):
     sale_ok = fields.Boolean('Sale Ok')
     purchase_ok = fields.Boolean('Purchase Ok')
     list_price = fields.Float('List Price')
+    price_msrp = fields.Float('MSRP')
     standard_price = fields.Float('Standard Price')
     type = fields.Char('Type')
     barcode = fields.Char('Barcode')

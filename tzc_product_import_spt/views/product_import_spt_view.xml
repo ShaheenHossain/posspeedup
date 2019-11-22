@@ -48,6 +48,7 @@
 										<field name='sale_ok' />
 										<field name='purchase_ok' />
 										<field name='list_price' />
+										<field name='price_msrp' />
 										<field name='standard_price' />
 										<field name='type' />
 										<field name='barcode' />

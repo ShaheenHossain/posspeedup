@@ -9,12 +9,13 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="before">
                     <field name="image" widget='image' options="{'size': [340, 220]}"/>
-                    <button name="open_image_spt" type="object" class="oe_link" icon='fa-arrow-right'/>
+                    <button name="open_image_spt" type="object" class="oe_link" icon='fa-3x fa-arrow-right'/>
                     <field name="image_secondary" widget='image' options="{'size': [340, 220]}"/>
-                    <button name="open_image_secondary_spt" type="object" class="oe_link" icon='fa-arrow-right'/>
+                    <button name="open_image_secondary_spt" type="object" class="oe_link" icon='fa-3x fa-arrow-right'/>
                 </xpath>
                 <xpath expr="//field[@name='attribute_value_ids']" position="after">
-                    <field name="number_of_variant" />
+                    <button name="action_open_variant_tree_spt" type="object" attrs="{'invisible': [('number_of_variant', 'in', (0,1))]}" icon="fa-2x fa-asterisk" class="oe_stat_button" />
+                    <field name="number_of_variant"> </field>
                     <field name="price_wholesale" />
                     <field name="price_msrp" />
                 </xpath>
@@ -32,10 +33,10 @@
                     <field name="categ_id" />
                     <field name="type" invisible='1'/>
                 </xpath>
-                <tree position="attributes">
+                <!-- <tree position="attributes">
                     <attribute name="decoration-info">number_of_variant&gt;1</attribute>
-                    <!-- <attribute name="decoration-success">number_of_variant&gt;1</attribute> -->
-                </tree>
+                    <attribute name="decoration-success">number_of_variant&gt;1</attribute>
+                </tree> -->
             </field>
         </record>
 

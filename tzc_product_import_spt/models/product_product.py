@@ -36,6 +36,10 @@ class product_product(models.Model):
             }
 
     @api.multi
+    def action_open_variant_tree_spt(self):
+        pass
+
+    @api.multi
     def action_open_variant_spt(self):
         for record in self:
             # print(record.product_tmpl_id.env.ref('product.product_variant_action').read()[0])
