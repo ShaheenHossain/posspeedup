@@ -58,6 +58,10 @@ class SaleCatalogWizard(models.TransientModel):
                         'price_msrp': line_id.product_price_msrp,
                         'product_uom_qty': line_id.product_qty,
                         'product_uom': line_id.product_uom_id.id,
+                        'product_model' : line_id.product_model,
+                        'product_brand' : line_id.product_brand,
+                        'product_color' : line_id.product_color,
+                        'product_size' : line_id.product_size
                     })
                 customer_orders[customer_id] = oid
 

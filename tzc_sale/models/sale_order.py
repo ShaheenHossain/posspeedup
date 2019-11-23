@@ -23,6 +23,11 @@ class SaleOrderLine(models.Model):
         'MSRP',
         digits=dp.get_precision('Product Price'),
         help="MSRP Price")
+    
+    product_model = fields.Char('Model')
+    product_brand = fields.Char('Brand')
+    product_color = fields.Char('Color')
+    product_size = fields.Char('Size')
 
     product_qty_available = fields.Float(related='product_id.product_tmpl_id.qty_available', readonly=True)
 

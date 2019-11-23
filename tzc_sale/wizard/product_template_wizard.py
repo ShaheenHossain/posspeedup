@@ -41,10 +41,24 @@ class ProductTemplateWizard(models.TransientModel):
 
     def generate_catalog_lines(self, product_pro_ids, catalog_id):
         for product_pro_id in product_pro_ids:
+            attribute_color = ''
+            attribute_size = ''
+            if product_pro_id.attribute_value_ids:
+                for attribute in product_pro_id.attribute_value_ids:
+                    if attribute.attribute_id.name == 'Size':
+                        attribute_size = attribute.name + attribute_size
+                    if attribute.attribute_id.display_name == 'Color':
+                        attribute_color = attribute.name + attribute_color
+
             if not self.env['sale.catalog.line'].search([('catalog_id', '=', catalog_id.id), ('product_pro_id', '=', product_pro_id.id)]):
                 line = self.env['sale.catalog.line'].create({
                     'catalog_id': catalog_id.id,
                     'product_pro_id': product_pro_id.id,
-                    'product_price': product_pro_id.list_price
+                    'product_price': product_pro_id.list_price,
+                    'product_model' : product_pro_id.model,
+                    'product_brand' : product_pro_id.brand,
+                    'product_color' : attribute_color,
+                    'product_size' : attribute_size
+
                 })
 

@@ -41,6 +41,10 @@ Here is your Sale Catalog from ${object.company_id.name}.
             <th style="padding: 10px;"/>
             <th style="padding: 10px;text-align: center;">Name</th>
 % if show_price:
+            <th style="padding: 10px;text-align: center;">Model</th>
+            <th style="padding: 10px;text-align: center;">Brand</th>
+            <th style="padding: 10px;text-align: center;">Color</th>
+            <th style="padding: 10px;text-align: center;">Size</th>
             <th style="padding: 10px;text-align: center;">Wholesale Price</th>
             <th style="padding: 10px;text-align: center;">MSRP</th>
             <th style="padding: 10px;text-align: center;">Price</th>
@@ -63,9 +67,31 @@ Here is your Sale Catalog from ${object.company_id.name}.
 % if show_price:
                     <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
                         <p class="css_quantity">
+                        ${line.product_model}
+                        </p>
+                    </td>
+                    <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
+                        <p class="css_quantity">
+                        ${line.product_brand}
+                        </p>
+                    </td>
+                    <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
+                        <p class="css_quantity">
+                        ${line.product_color}
+                        </p>
+                    </td>
+                    <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
+                        <p class="css_quantity">
+                        ${line.product_size}
+                        </p>
+                    </td>
+
+                    <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
+                        <p class="css_quantity">
                         ${line.price_wholesale}
                         </p>
                     </td>
+                    
                     <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
                         <p class="css_quantity">
                         ${line.price_msrp}
