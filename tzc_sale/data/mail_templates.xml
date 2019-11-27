@@ -37,12 +37,11 @@ Here is your Sale Catalog from ${object.company_id.name}.
 <table style="border: 2px solid #dbdde0;">
     <thead>
         <tr>
-            <th style="padding: 10px;">Product</th>
+            <th style="padding: 10px;"></th>
             <th style="padding: 10px;"/>
-            <th style="padding: 10px;text-align: center;">Name</th>
 % if show_price:
-            <th style="padding: 10px;text-align: center;">Model</th>
             <th style="padding: 10px;text-align: center;">Brand</th>
+            <th style="padding: 10px;text-align: center;">Model</th>
             <th style="padding: 10px;text-align: center;">Color</th>
             <th style="padding: 10px;text-align: center;">Size</th>
             <th style="padding: 10px;text-align: center;">Wholesale Price</th>
@@ -56,23 +55,23 @@ Here is your Sale Catalog from ${object.company_id.name}.
 % for line in object.order_line[:20]:
             <tr>
                 <td style="border: 2px solid #dbdde0; padding: 10px;">
-                    <img width="250px" src="/web/image?model=product.product&amp;id=${line.product_id.id}&amp;field=image"/>
-                </td>
+                    <img width="250px" src="${line.image_url}"/>
+               </td>
                 <td style="border: 2px solid #dbdde0; padding: 10px;">
-                    <img width="250px" src="/web/image?model=product.product&amp;id=${line.product_id.id}&amp;field=image_secondary"/>
+                    <img width="250px" src="${line.image_secondary_url}"/>
+                   
                 </td>
-                <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
-                    <p>${line.product_id.name}</p>
-                </td>
+                
 % if show_price:
+                    
                     <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
                         <p class="css_quantity">
-                        ${line.product_model}
+                        ${line.product_brand}
                         </p>
                     </td>
                     <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
                         <p class="css_quantity">
-                        ${line.product_brand}
+                        ${line.product_model}
                         </p>
                     </td>
                     <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">

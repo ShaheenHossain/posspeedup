@@ -50,15 +50,14 @@
                                     <tree editable="bottom" create="1" string="Catalog Lines">
                                         <field name="product_image" widget="image" options="{'size': [240, 120]}"/>
                                         <field name="product_image_secondary" widget="image" options="{'size': [240, 120]}"/>
-                                        <field name="product_tmpl_id" style="font-weight: bold;"/>
+                                        <field name="product_tmpl_id" style="font-weight: bold;"  invisible="1" />
                                         <field name="product_pro_id" style="font-weight: bold;" invisible="1"/>
-                                        <field name="product_name" style="font-weight: bold;"/>
-                                        <field name="product_uom_id" style="font-weight: bold;"/>
-                                        <field name="product_model" style="font-weight: bold;"/>
+                                        <field name="product_name" style="font-weight: bold;"  invisible="1"/>
                                         <field name="product_brand" style="font-weight: bold;"/>
+                                        <field name="product_model" style="font-weight: bold;"/>
                                         <field name="product_color" style="font-weight: bold;"/>
                                         <field name="product_size" style="font-weight: bold;"/>
-
+                                        <field name="product_uom_id" groups="product.group_uom" style="font-weight: bold;"/>
                                         <field name="product_price_wholesale" style="font-weight: bold;"/>
                                         <field name="product_price_msrp" style="font-weight: bold;"/>
                                         <field name="product_price" style="font-weight: bold;"/>
