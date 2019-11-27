@@ -12,8 +12,8 @@ class SaleCatalogLine(models.Model):
     product_pro_id = fields.Many2one('product.product', ondelete='cascade', string='Product', required=True)
     product_name = fields.Char(related='product_pro_id.name', readonly=True)
     
-    image_url = fields.Char('Image URL', related='product_pro_id.image_url')
-    image_secondary_url = fields.Char('Image Secondary URL', related='product_pro_id.image_secondary_url')
+    image_url = fields.Char('Image URL')
+    image_secondary_url = fields.Char('Image Secondary URL')
     product_image = fields.Binary('Image', related='product_pro_id.image', readonly=True)
     product_image_secondary = fields.Binary('Secondary Image', related='product_pro_id.image_secondary', readonly=True)
     product_uom_id = fields.Many2one('product.uom', related='product_pro_id.uom_id', readonly=True)

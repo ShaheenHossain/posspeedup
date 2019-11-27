@@ -58,7 +58,8 @@ class ProductTemplateWizard(models.TransientModel):
                     'product_model' : product_pro_id.model,
                     'product_brand' : product_pro_id.brand,
                     'product_color' : attribute_color,
-                    'product_size' : attribute_size
-
+                    'product_size' : attribute_size,
+                    'image_url':product_pro_id.image_url,
+                    'image_secondary_url':product_pro_id.image_secondary_url,
                 })
 
