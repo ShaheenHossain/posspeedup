@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from odoo.addons import decimal_precision as dp
 
 
 class SaleCatalogLine(models.Model):
