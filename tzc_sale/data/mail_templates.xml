@@ -55,10 +55,10 @@ Here is your Sale Catalog from ${object.company_id.name}.
 % for line in object.order_line[:20]:
             <tr>
                 <td style="border: 2px solid #dbdde0; padding: 10px;">
-                    <img width="250px" src="${line.image_url}"/>
+                    <img width="250px" src="${line.product_id.image_url}"/>
                </td>
                 <td style="border: 2px solid #dbdde0; padding: 10px;">
-                    <img width="250px" src="${line.image_secondary_url}"/>
+                    <img width="250px" src="${line.product_id.image_secondary_url}"/>
                    
                 </td>
                 
@@ -79,7 +79,7 @@ Here is your Sale Catalog from ${object.company_id.name}.
                         ${line.product_color}
                         </p>
                     </td>
-                    <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;">
+                    <td style="text-align: center; border: 2px solid #dbdde0; padding: 10px;white-space: nowrap;">
                         <p class="css_quantity">
                         ${line.product_size}
                         </p>

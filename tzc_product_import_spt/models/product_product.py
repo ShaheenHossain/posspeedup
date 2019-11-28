@@ -46,3 +46,14 @@ class product_product(models.Model):
             vals = self.env.ref('product.product_variant_action').read()[0]
             vals.update({'context':vals['context'].replace('active_id',str(record.product_tmpl_id.id))}) 
             return vals
+
+    @api.model
+    def name_get(self):
+        res = super(product_product, self).name_get()
+        result = []
+        for record in res:
+            product_id = self.browse(record[0])
+            if product_id:
+                result.append((product_id.id, product_id.name))
+        return result
+    
