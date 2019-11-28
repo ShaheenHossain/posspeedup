@@ -17,14 +17,14 @@ class SaleCatalogLine(models.Model):
     product_image = fields.Binary('Image', related='product_pro_id.image', readonly=True)
     product_image_secondary = fields.Binary('Secondary Image', related='product_pro_id.image_secondary', readonly=True)
     product_uom_id = fields.Many2one('product.uom', related='product_pro_id.uom_id', readonly=True)
-    product_price = fields.Float('Our Price')  # this price pull from product list price, but can be modified
+    product_price = fields.Float('Our Price',digits=dp.get_precision('Product Price'))   # this price pull from product list price, but can be modified
     product_price_msrp = fields.Float(related='product_pro_id.price_msrp', readonly=True)
     product_model = fields.Char('Model')
     product_brand = fields.Char('Brand')
     product_color = fields.Char('Color')
     product_size = fields.Char('Size')
     product_price_wholesale = fields.Float(related='product_pro_id.price_wholesale', readonly=True)
-    product_qty = fields.Float('Qty', default=1.0)
+    product_qty = fields.Float('Qty', digits=dp.get_precision('Product Unit of Measure'), default=1.0)
     product_qty_available = fields.Float('Qty On Hand', related='product_pro_id.qty_available', readonly=True)
 
 
