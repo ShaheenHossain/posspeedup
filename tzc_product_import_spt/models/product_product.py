@@ -47,13 +47,17 @@ class product_product(models.Model):
             vals.update({'context':vals['context'].replace('active_id',str(record.product_tmpl_id.id))}) 
             return vals
 
-    @api.model
+    @api.multi
     def name_get(self):
         res = super(product_product, self).name_get()
         result = []
         for record in res:
+            name = ''
             product_id = self.browse(record[0])
             if product_id:
-                result.append((product_id.id, product_id.name))
+                name = product_id.name
+                if product_id.attribute_value_ids:
+                    for attribute in product_id.attribute_value_ids:
+                        name = name +' ' + attribute.name
+                result.append((product_id.id, name))
         return result
-    
