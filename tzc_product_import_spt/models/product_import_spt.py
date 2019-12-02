@@ -6,6 +6,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import base64
 from odoo.exceptions import UserError
+from odoo.modules import get_module_resource
 try:
     import paramiko
 except ImportError:
@@ -181,14 +182,29 @@ class product_import_spt(models.Model):
                         color_value = attribute_value_obj.search([('attribute_id','=',attribute_color.id),('name','=',variant.color)])
                         size_value = attribute_value_obj.search([('attribute_id','=',attribute_size.id),('name','=',variant.size)])
                         value_ids = color_value.ids + size_value.ids
+                        remote_image1 = ''
+                        remote_image2 = ''
                         try:
                             remote_image1 = sftp.open(record.image_path + variant.image_1.replace('\r',''))
+                            remote_image1 = base64.encodestring(remote_image1.read())
                         except:
-                            raise UserError(_(variant.image_1 + ' Image not found!'))
+                            # raise UserError(_(variant.image_1 + ' Image not found!'))
+                                # /web/static/src/img/placeholder.png
+                                img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
+                                if img_path:
+                                    with open(img_path, 'rb') as f:
+                                        image = f.read()
+                                remote_image1 = base64.b64encode(image)
                         try:
                             remote_image2 = sftp.open(record.image_path + variant.image_2.replace('\r',''))
+                            remote_image2 = base64.encodestring(remote_image2.read())
                         except:
-                            raise UserError(_(variant.image_2 + ' Image not found!'))
+                            # raise UserError(_(variant.image_2 + ' Image not found!'))
+                            img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
+                            if img_path:
+                                with open(img_path, 'rb') as f:
+                                    image = f.read()
+                            remote_image2 = base64.b64encode(image)
                         for product_pro in product.product_variant_ids:
                             value_ids.sort()
                             pro_value_ids = product_pro.attribute_value_ids.ids
@@ -209,8 +225,8 @@ class product_import_spt(models.Model):
                                         'brand':variant.brand,
                                         'model':variant.model,
                                         'categ_id':categ_obj.search([('name','=',variant.categ_id)],limit=1).id or categ_obj.create({'name':variant.categ_id}).id,
-                                        'image':base64.encodestring(remote_image1.read()),
-                                        'image_secondary':base64.encodestring(remote_image2.read()),
+                                        'image':remote_image1,
+                                        'image_secondary':remote_image2,
                                         'image_url':variant.image_1_url or '',
                                         'image_secondary_url':variant.image_2_url or '',
                                     })
