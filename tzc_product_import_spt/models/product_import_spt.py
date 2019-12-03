@@ -247,27 +247,30 @@ class product_import_spt(models.Model):
                     if line:
                         line = line.split(',')
                         print(line[0])
-                        import_line_list.append((0,0,{
-                            'name':line[1],
-                            'internal_reference':line[2],
-                            'is_active':bool(int(line[3])),
-                            'sale_ok':bool(int(line[4])),
-                            'purchase_ok':bool(int(line[5])),
-                            'list_price':int(line[6] or '0'),
-                            'standard_price':int(line[7] or '0'),
-                            'price_msrp': int(line[8] or '0'),
-                            'type':line[9],
-                            'barcode':line[10],
-                            'brand':line[11],
-                            'model':line[12],
-                            'color':line[13] or 'None',
-                            'size':line[14] or 'None',
-                            'categ_id':line[15],
-                            'image_1':line[16],
-                            'image_2':line[17][:len(line[17])],
-                            'image_1_url':line[18],
-                            'image_2_url':line[19],
-                        }))
+                        try:
+                            import_line_list.append((0,0,{
+                                'name':line[1],
+                                'internal_reference':line[2],
+                                'is_active':bool(int(line[3])),
+                                'sale_ok':bool(int(line[4])),
+                                'purchase_ok':bool(int(line[5])),
+                                'list_price':float(line[6] or '0'),
+                                'standard_price':float(line[7] or '0'),
+                                'price_msrp': float(line[8] or '0'),
+                                'type':line[9],
+                                'barcode':line[10],
+                                'brand':line[11],
+                                'model':line[12],
+                                'color':line[13] or 'None',
+                                'size':line[14] or 'None',
+                                'categ_id':line[15],
+                                'image_1':line[16],
+                                'image_2':line[17][:len(line[17])],
+                                'image_1_url':line[18],
+                                'image_2_url':line[19],
+                            }))
+                        except:
+                            raise UserError(_('File is formet is not proper!'))
                 record.import_line_ids = import_line_list
                 record.state = 'process'
 
