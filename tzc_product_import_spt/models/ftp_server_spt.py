@@ -42,7 +42,7 @@ class ftp_server_spt(models.Model):
             try:
                 s = paramiko.SSHClient()
                 s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                s.connect(ipHost, portHost, usernameLogin, passwordLogin, timeout=10)
+                s.connect(ipHost, portHost, usernameLogin, passwordLogin, timeout=10,allow_agent=False,look_for_keys=False)
                 sftp = s.open_sftp()
                 messageTitle = _("Connection Test Succeeded!\nEverything seems properly set up for FTP back-ups!")
             except Exception as e:

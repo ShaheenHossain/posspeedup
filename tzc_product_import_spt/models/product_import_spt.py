@@ -103,7 +103,7 @@ class product_import_spt(models.Model):
             inv_line_list = [(x[0],x[1]) for x in self.env.cr.fetchall()]
             s = paramiko.SSHClient()
             s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            s.connect(record.server_id.server_ip, record.server_id.server_port, record.server_id.server_user, record.server_id.server_password, timeout=10)
+            s.connect(record.server_id.server_ip, record.server_id.server_port, record.server_id.server_user, record.server_id.server_password, timeout=10,allow_agent=False,look_for_keys=False)
             sftp = s.open_sftp()
             product_ids = []
             for line in inv_line_list:
@@ -111,7 +111,7 @@ class product_import_spt(models.Model):
                 color_value_ids = []
                 size_value_ids = []
                 for variant in variants:
-                    product_product = product_pro_obj.search([('default_code','=',variant.internal_reference)])
+                    product_product = product_pro_obj.search([('barcode','=',variant.barcode)])
                     if not product_product.id:
                         # if variant.color:
                         color_value = attribute_value_obj.search([('attribute_id','=',attribute_color.id),('name','=',variant.color or 'None')])
@@ -144,7 +144,7 @@ class product_import_spt(models.Model):
                         'list_price': variant.standard_price, 
                         'price_msrp':variant.price_msrp,
                         'type':product_type,
-                        'barcode':variant.barcode,
+                        # 'barcode':variant.barcode,
                         'brand':variant.brand,
                         'model':variant.model,
                         'categ_id':categ_obj.search([('name','=',variant.categ_id)],limit=1).id or categ_obj.create({'name':variant.categ_id}).id,
@@ -177,7 +177,7 @@ class product_import_spt(models.Model):
                 product.create_variant_ids()
                 product_ids.append(product.id)
                 for variant in variants:
-                    product_product = product_pro_obj.search([('default_code','=',variant.internal_reference)])
+                    product_product = product_pro_obj.search([('barcode','=',variant.barcode)])
                     if not product_product.id:
                         color_value = attribute_value_obj.search([('attribute_id','=',attribute_color.id),('name','=',variant.color)])
                         size_value = attribute_value_obj.search([('attribute_id','=',attribute_size.id),('name','=',variant.size)])
@@ -213,7 +213,7 @@ class product_import_spt(models.Model):
                                 if product_pro.id:
                                     product_pro.write({
                                         # 'name':variant.name,
-                                       'default_code':variant.internal_reference,
+                                        # 'default_code':variant.internal_reference,
                                         'active':variant.is_active,
                                         'sale_ok':variant.sale_ok,
                                         'purchase_ok':variant.purchase_ok,
@@ -232,7 +232,7 @@ class product_import_spt(models.Model):
                                     })
             record.product_ids = [(6,0,product_ids)]
             for tmpl_pro in record.product_ids:
-                product_pro_obj.search([('product_tmpl_id','=',tmpl_pro.id),('default_code','in',[False, ' ', ''])]).unlink()
+                product_pro_obj.search([('product_tmpl_id','=',tmpl_pro.id),('barcode','in',[False, ' ', ''])]).unlink()
             record.state = 'done'
 
     @api.multi
@@ -250,24 +250,24 @@ class product_import_spt(models.Model):
                         try:
                             import_line_list.append((0,0,{
                                 'name':line[1],
-                                'internal_reference':line[2],
-                                'is_active':bool(int(line[3])),
-                                'sale_ok':bool(int(line[4])),
-                                'purchase_ok':bool(int(line[5])),
-                                'list_price':float(line[6] or '0'),
-                                'standard_price':float(line[7] or '0'),
-                                'price_msrp': float(line[8] or '0'),
-                                'type':line[9],
-                                'barcode':line[10],
-                                'brand':line[11],
-                                'model':line[12],
-                                'color':line[13] or 'None',
-                                'size':line[14] or 'None',
-                                'categ_id':line[15],
-                                'image_1':line[16],
-                                'image_2':line[17][:len(line[17])],
-                                'image_1_url':line[18],
-                                'image_2_url':line[19],
+                                # 'internal_reference':line[2],
+                                'is_active':bool(int(line[2])),
+                                'sale_ok':bool(int(line[3])),
+                                'purchase_ok':bool(int(line[4])),
+                                'list_price':float(line[5] or '0'),
+                                'standard_price':float(line[6] or '0'),
+                                'price_msrp': float(line[7] or '0'),
+                                'type':line[8],
+                                'barcode':line[9],
+                                'brand':line[10],
+                                'model':line[11],
+                                'color':line[12] or 'None',
+                                'size':line[13] or 'None',
+                                'categ_id':line[14],
+                                'image_1':line[15],
+                                'image_2':line[16][:len(line[16])],
+                                'image_1_url':line[17],
+                                'image_2_url':line[18],
                             }))
                         except:
                             raise UserError(_('File is formet is not proper!'))

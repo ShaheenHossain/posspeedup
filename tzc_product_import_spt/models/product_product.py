@@ -10,6 +10,12 @@ class product_product(models.Model):
     image_url = fields.Char('Image URL')
     image_secondary_url = fields.Char('Image Secondary URL')
     number_of_variant = fields.Integer('Total Variant', related='product_tmpl_id.product_variant_count')
+    default_code = fields.Char('Internal Reference', index=True, compute="_get_default_code")
+
+    def _get_default_code(self):
+        for record in self:
+            if record.barcode:
+                record.default_code = record.barcode
 
     # def _get_number_of_variant(self):
     #     for record in self:
