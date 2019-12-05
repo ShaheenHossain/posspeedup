@@ -1,0 +1,22 @@
+.pos .pos-product-order {
+    background: white;
+    border: 1px solid #CECBCB;
+    color: #555555;
+    cursor: pointer;
+    display: inline-block;
+    font: 13.3333px Arial;
+    font-family: "Lato","Lucida Grande", Helvetica, Verdana, Arial;
+    font-size: 18px;
+    letter-spacing: normal;
+    margin: 6px;
+    padding: 5px 5px;
+    padding-left: 5px;
+    position: absolute;
+    right: 175px;
+    text-align: left;
+    text-indent: 0px;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    word-spacing: normal;
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="ProductCategoriesWidget">
+	    <t t-jquery=".searchbox" t-operation="before">
+            <select class="pos-product-order">
+                <option id="pos-product-order-default">Default</option>
+                <option id="pos-product-order-name-asc">A &#8594; Z</option>
+                <option id="pos-product-order-name-desc">Z &#8594; A</option>
+                <option id="pos-product-order-price-asc">$ &#8594; $$$</option>
+                <option id="pos-product-order-price-desc">$$$ &#8594; $</option>
+            </select>
+        </t>
+    </t>
+
+</templates>

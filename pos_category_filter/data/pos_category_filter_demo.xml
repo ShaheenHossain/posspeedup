@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<odoo>
+    <data noupdate="1">
+        <record id="point_of_sale.pos_config_main" model="pos.config">
+            <field name="wk_product_category_ids" eval="[(4,ref('point_of_sale.fruits_vegetables'))]"/>
+        </record>
+    </data>
+</odoo>
