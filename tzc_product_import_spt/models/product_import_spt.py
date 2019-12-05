@@ -25,7 +25,7 @@ class product_import_spt(models.Model):
 
     number_of_product = fields.Integer('Number Of Product', compute='_get_number_of_product')
     product_ids = fields.Many2many('product.template', 'product_import_product_tmpl_rel_spt', 'product_import_id', 'product_tmpl_id', string='Products', copy=False)
-    server_id = fields.Many2one('ftp.server.spt', 'Server')
+    # server_id = fields.Many2one('ftp.server.spt', 'Server')
     image_path = fields.Char('Image Path')
     state = fields.Selection([
         ('draft','Draft'),
@@ -101,10 +101,10 @@ class product_import_spt(models.Model):
             get_group = "select model,brand from product_import_line_spt where import_id=" + str(record.id) +  " group by brand,model"
             self.env.cr.execute(get_group)
             inv_line_list = [(x[0],x[1]) for x in self.env.cr.fetchall()]
-            s = paramiko.SSHClient()
-            s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            s.connect(record.server_id.server_ip, record.server_id.server_port, record.server_id.server_user, record.server_id.server_password, timeout=10,allow_agent=False,look_for_keys=False)
-            sftp = s.open_sftp()
+            # s = paramiko.SSHClient()
+            # s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # s.connect(record.server_id.server_ip, record.server_id.server_port, record.server_id.server_user, record.server_id.server_password, timeout=10,allow_agent=False,look_for_keys=False)
+            # sftp = s.open_sftp()
             product_ids = []
             for line in inv_line_list:
                 variants = import_line_obj.search([('import_id','=',record.id),('brand','=',line[1]),('model','=',line[0])])
@@ -182,29 +182,29 @@ class product_import_spt(models.Model):
                         color_value = attribute_value_obj.search([('attribute_id','=',attribute_color.id),('name','=',variant.color)])
                         size_value = attribute_value_obj.search([('attribute_id','=',attribute_size.id),('name','=',variant.size)])
                         value_ids = color_value.ids + size_value.ids
-                        remote_image1 = ''
-                        remote_image2 = ''
-                        try:
-                            remote_image1 = sftp.open(record.image_path + variant.image_1.replace('\r',''))
-                            remote_image1 = base64.encodestring(remote_image1.read())
-                        except:
-                            # raise UserError(_(variant.image_1 + ' Image not found!'))
-                                # /web/static/src/img/placeholder.png
-                                img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
-                                if img_path:
-                                    with open(img_path, 'rb') as f:
-                                        image = f.read()
-                                remote_image1 = base64.b64encode(image)
-                        try:
-                            remote_image2 = sftp.open(record.image_path + variant.image_2.replace('\r',''))
-                            remote_image2 = base64.encodestring(remote_image2.read())
-                        except:
-                            # raise UserError(_(variant.image_2 + ' Image not found!'))
-                            img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
-                            if img_path:
-                                with open(img_path, 'rb') as f:
-                                    image = f.read()
-                            remote_image2 = base64.b64encode(image)
+                        # remote_image1 = ''
+                        # remote_image2 = ''
+                        # try:
+                        #     remote_image1 = sftp.open(record.image_path + variant.image_1.replace('\r',''))
+                        #     remote_image1 = base64.encodestring(remote_image1.read())
+                        # except:
+                        #     # raise UserError(_(variant.image_1 + ' Image not found!'))
+                        #         # /web/static/src/img/placeholder.png
+                        #         img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
+                        #         if img_path:
+                        #             with open(img_path, 'rb') as f:
+                        #                 image = f.read()
+                        #         remote_image1 = base64.b64encode(image)
+                        # try:
+                        #     remote_image2 = sftp.open(record.image_path + variant.image_2.replace('\r',''))
+                        #     remote_image2 = base64.encodestring(remote_image2.read())
+                        # except:
+                        #     # raise UserError(_(variant.image_2 + ' Image not found!'))
+                        #     img_path = get_module_resource('web', 'static/src/img', 'placeholder.png')
+                        #     if img_path:
+                        #         with open(img_path, 'rb') as f:
+                        #             image = f.read()
+                        #     remote_image2 = base64.b64encode(image)
                         for product_pro in product.product_variant_ids:
                             value_ids.sort()
                             pro_value_ids = product_pro.attribute_value_ids.ids
@@ -225,8 +225,8 @@ class product_import_spt(models.Model):
                                         'brand':variant.brand,
                                         'model':variant.model,
                                         'categ_id':categ_obj.search([('name','=',variant.categ_id)],limit=1).id or categ_obj.create({'name':variant.categ_id}).id,
-                                        'image':remote_image1,
-                                        'image_secondary':remote_image2,
+                                        # 'image':remote_image1,
+                                        # 'image_secondary':remote_image2,
                                         'image_url':variant.image_1_url or '',
                                         'image_secondary_url':variant.image_2_url or '',
                                     })
@@ -264,10 +264,10 @@ class product_import_spt(models.Model):
                                 'color':line[12] or 'None',
                                 'size':line[13] or 'None',
                                 'categ_id':line[14],
-                                'image_1':line[15],
-                                'image_2':line[16][:len(line[16])],
-                                'image_1_url':line[17],
-                                'image_2_url':line[18],
+                                # 'image_1':line[15],
+                                # 'image_2':line[16][:len(line[16])],
+                                'image_1_url':line[15],
+                                'image_2_url':line[16],
                             }))
                         except:
                             raise UserError(_('File is formet is not proper!'))

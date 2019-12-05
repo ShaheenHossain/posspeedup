@@ -3,6 +3,9 @@
 ###############################################################################
 
 from odoo import api, fields, models, _
+import requests
+import base64
+from odoo.modules import get_module_resource
 
 class product_product(models.Model):
     _inherit = 'product.product'
@@ -12,6 +15,38 @@ class product_product(models.Model):
     number_of_variant = fields.Integer('Total Variant', related='product_tmpl_id.product_variant_count')
     default_code = fields.Char('Internal Reference', index=True, compute="_get_default_code")
 
+    @api.depends('image_variant', 'product_tmpl_id.image','image_url')
+    def _compute_images(self):
+        res = super(product_product, self)._compute_images()
+        for record in self:
+            try:
+                if not record.image_url:
+                    raise UserError(_())
+                image = base64.b64encode(requests.get(record.image_url).content)
+                record.image = image
+            except:
+                img_path = get_module_resource('tzc_product_import_spt', 'static/src/img', 'default_product_img.png')
+                if img_path:
+                    with open(img_path, 'rb') as f:
+                        image = f.read()
+                    record.image = base64.b64encode(image)
+        return res
+
+    @api.depends('image_secondary_url')
+    def _get_image_secondary(self):
+        for record in self:
+            try:
+                if not record.image_secondary_url:
+                    raise UserError(_())
+                image = base64.b64encode(requests.get(record.image_secondary_url).content)
+                record.image_secondary = image
+            except:
+                img_path = get_module_resource('tzc_product_import_spt', 'static/src/img', 'default_product_img.png')
+                if img_path:
+                    with open(img_path, 'rb') as f:
+                        image = f.read()
+                    record.image_secondary = base64.b64encode(image)
+    
     def _get_default_code(self):
         for record in self:
             if record.barcode:
