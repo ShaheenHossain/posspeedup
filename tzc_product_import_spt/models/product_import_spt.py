@@ -4,14 +4,11 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-import base64
-from odoo.exceptions import UserError
-from odoo.modules import get_module_resource
-try:
-    import paramiko
-except ImportError:
-    raise ImportError(
-        'This module needs paramiko to automatically write backups to the FTP through SFTP. Please install paramiko on your system. (sudo pip3 install paramiko)')
+# try:
+#     import paramiko
+# except ImportError:
+#     raise ImportError(
+#         'This module needs paramiko to automatically write backups to the FTP through SFTP. Please install paramiko on your system. (sudo pip3 install paramiko)')
 
 class product_import_spt(models.Model):
     _name = 'product.import.spt'
@@ -232,6 +229,7 @@ class product_import_spt(models.Model):
                                     })
             record.product_ids = [(6,0,product_ids)]
             for tmpl_pro in record.product_ids:
+                tmpl_pro.refresh_images_template()
                 product_pro_obj.search([('product_tmpl_id','=',tmpl_pro.id),('barcode','in',[False, ' ', ''])]).unlink()
             record.state = 'done'
 

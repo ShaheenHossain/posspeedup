@@ -3,8 +3,6 @@
 ###############################################################################
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
-import base64
 
 class product_import_line_spt(models.Model):
     _name = 'product.import.line.spt'

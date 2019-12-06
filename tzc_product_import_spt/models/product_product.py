@@ -15,31 +15,41 @@ class product_product(models.Model):
     number_of_variant = fields.Integer('Total Variant', related='product_tmpl_id.product_variant_count')
     default_code = fields.Char('Internal Reference', index=True, compute="_get_default_code")
 
-    @api.depends('image_variant', 'product_tmpl_id.image','image_url')
-    def _compute_images(self):
-        res = super(product_product, self)._compute_images()
+    def refresh_images_product(self):
+        self.onchange_image_url()
+        self.onchange_image_secondary()
+
+    @api.onchange('image_url')
+    def onchange_image_url(self):
         for record in self:
             try:
                 if not record.image_url:
                     raise UserError(_())
-                image = base64.b64encode(requests.get(record.image_url).content)
-                record.image = image
+                res = requests.get(record.image_url)
+                if res.ok:
+                    image = base64.b64encode(res.content)
+                    record.main_image = image
+                else:
+                    raise UserError(_())
             except:
                 img_path = get_module_resource('tzc_product_import_spt', 'static/src/img', 'default_product_img.png')
                 if img_path:
                     with open(img_path, 'rb') as f:
                         image = f.read()
-                    record.image = base64.b64encode(image)
-        return res
+                    record.main_image = base64.b64encode(image)
 
-    @api.depends('image_secondary_url')
-    def _get_image_secondary(self):
+    @api.onchange('image_secondary_url')
+    def onchange_image_secondary(self):
         for record in self:
             try:
                 if not record.image_secondary_url:
                     raise UserError(_())
-                image = base64.b64encode(requests.get(record.image_secondary_url).content)
-                record.image_secondary = image
+                res = requests.get(record.image_secondary_url)
+                if res.ok:
+                    image = base64.b64encode(res.content)
+                    record.image_secondary = image
+                else:
+                    raise UserError(_())
             except:
                 img_path = get_module_resource('tzc_product_import_spt', 'static/src/img', 'default_product_img.png')
                 if img_path:
