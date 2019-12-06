@@ -17,6 +17,7 @@
 
     'data': [
         'security/ir.model.access.csv',
+        'data/action_image.xml',
         'views/product_import_spt_view.xml',
         # 'views/ftp_server_spt_view.xml',
         'views/product_product_view.xml',

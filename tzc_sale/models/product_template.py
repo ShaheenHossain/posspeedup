@@ -12,7 +12,7 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     image_secondary = fields.Binary('Secondary Image', compute='_get_image_and_url_secondary_template')
-
+    main_image = fields.Binary("Main Image", compute='_get_image_and_url_secondary_template')
     price_wholesale = fields.Float(
         'Wholesale Price',
         digits=dp.get_precision('Product Price'),
@@ -30,4 +30,5 @@ class ProductTemplate(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    image_secondary = fields.Binary("Image Secondary", compute="_get_image_secondary")
+    image_secondary = fields.Binary("Image Secondary")
+    main_image = fields.Binary("Main Image")

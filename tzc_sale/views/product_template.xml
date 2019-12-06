@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="product.product_template_tree_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="before">
-                    <field name="image" widget="image" options="{'size': [340, 220]}"/>
+                    <field name="main_image" widget="image" options="{'size': [340, 220]}"/>
                     <field name="image_secondary" widget="image" options="{'size': [340, 220]}"/>
                 </xpath>
                 <xpath expr="//field[@name='list_price']" position="before">
@@ -81,9 +81,9 @@
                 <xpath expr="//field[@name='product_image_ids']/.." position="replace">
                     <page string="Images">
                             <group>
-                                <label for="image" string="Main Image"/>
-                                <div name="image">
-                                    <field name="image" widget="image" nolabel='1'/>
+                                <label for="main_image" string="Main Image"/>
+                                <div name="main_image">
+                                    <field name="main_image" widget="image" nolabel='1'/>
                                 </div>
                             </group>
                             <group>
