@@ -15,7 +15,7 @@ class SaleCatalogLine(models.Model):
     
     image_url = fields.Char('Image URL')
     image_secondary_url = fields.Char('Image Secondary URL')
-    product_image = fields.Binary('Image', related='product_pro_id.image', readonly=True)
+    product_image = fields.Binary('Image', related='product_pro_id.main_image', readonly=True)
     product_image_secondary = fields.Binary('Secondary Image', related='product_pro_id.image_secondary', readonly=True)
     product_uom_id = fields.Many2one('product.uom', related='product_pro_id.uom_id', readonly=True)
     product_price = fields.Float('Our Price',digits=dp.get_precision('Product Price'))   # this price pull from product list price, but can be modified

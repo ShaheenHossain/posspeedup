@@ -4,8 +4,6 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-import base64
-from odoo.modules import get_module_resource
 # try:
 #     import paramiko
 # except ImportError:
