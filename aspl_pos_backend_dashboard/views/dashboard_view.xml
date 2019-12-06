@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="Sales Done Assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/amcharts.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/serial.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/pie.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/export.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/light.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/blob.js/blob.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/fabric.js/fabric.min.js"/>   
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/pdfmake/pdfmake.min.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/pdfmake/vfs_fonts.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/jszip/jszip.min.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/xlsx/xlsx.min.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/libs/FileSaver.js/FileSaver.min.js"/>
+                <link rel="stylesheet" href="/aspl_pos_backend_dashboard/static/src/css/export.css"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/dashboard.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/jquery.dataTables.min.js"/>
+                <link rel="stylesheet" href="/aspl_pos_backend_dashboard/static/src/css/style.css"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/daterangepicker.js"/>
+                <script type="text/javascript" src="/aspl_pos_backend_dashboard/static/src/js/bootstrap-datepicker.js"/>
+                <link rel="stylesheet" href="/aspl_pos_backend_dashboard/static/src/css/daterangepicker.css"/>
+                <link rel="stylesheet" href="/aspl_pos_backend_dashboard/static/src/css/custom.css"/>
+            </xpath>
+        </template>
+
+        <record id="tag_dashboard_id" model="ir.actions.client">
+            <field name="name">Dashboard</field>
+            <field name="tag">tag_dashboard</field>
+        </record>
+
+        <menuitem id="menu_point_dashboard" action="aspl_pos_backend_dashboard.tag_dashboard_id" name="POS Dashboard" 
+            parent="point_of_sale.menu_point_root" sequence="110" groups="point_of_sale.group_pos_user"/>
+    </data>
+</odoo>

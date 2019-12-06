@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_pos_config_form_inherit">
+            <field name="name">pos.config.form.view</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='row mt16 o_settings_container'][2]" position="after">
+                    <h2>POS Product Multi Images Option</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name='allow_multi_image' />
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="multi_image" string="Allow multi product images"/>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </xpath>
+            </field>
+        </record>
+
+        <!-- <record id="product_normal_form_view" model="ir.ui.view">
+            <field name="name">product.product.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <group name="sale_condition" position="after">
+                    <group name="pos_multi_image" string="Point of Sale Multi Image">
+                        <div>
+                            <field name="product_multi_img_id">
+                                <tree editable="bottom">
+                                    <field name="image" widget="image"/>
+                                    <field name="name"/>
+                                    <field name="sequence"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </group>
+                </group>
+            </field>
+        </record> -->
+
+        <record id="product_normal_form_view" model="ir.ui.view">
+            <field name="name">product.product.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Multi Images">
+                        <group name="pos_multi_image" string="Point of Sale Multi Image">
+                           <div>
+                                <field name="product_multi_img_id">
+                                    <tree editable="bottom">
+                                        <field name="image" widget="image"/>
+                                        <field name="name"/>
+                                        <field name="sequence"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </group>
+                    </page>
+                </xpath>
+
+                
+                 <!-- <xpath expr="//field[@name='attribute_value_ids']" position="after">
+                    <group name="pos_multi_image" string="Point of Sale Multi Image">
+                        <div>
+                            <field name="product_multi_img_id">
+                                <tree editable="bottom">
+                                    <field name="image" widget="image"/>
+                                    <field name="name"/>
+                                    <field name="sequence"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </group>
+                </xpath> -->
+                <!-- <group name="sale_condition" position="after">
+                    <group name="pos_multi_image" string="Point of Sale Multi Image">
+                        <div>
+                            <field name="product_multi_img_id">
+                                <tree editable="bottom">
+                                    <field name="image" widget="image"/>
+                                    <field name="name"/>
+                                    <field name="sequence"/>
+                                </tree>
+                            </field>
+                        </div>
+                    </group>
+                </group> -->
+            </field>
+        </record>
+
+    </data>
+</odoo>
