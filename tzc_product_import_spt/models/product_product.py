@@ -25,7 +25,7 @@ class product_product(models.Model):
             try:
                 if not record.image_url:
                     raise UserError(_())
-                res = requests.get(record.image_url)
+                res = requests.get(record.image_url.replace('\r',''))
                 if res.ok:
                     image = base64.b64encode(res.content)
                     record.main_image = image
@@ -44,7 +44,7 @@ class product_product(models.Model):
             try:
                 if not record.image_secondary_url:
                     raise UserError(_())
-                res = requests.get(record.image_secondary_url)
+                res = requests.get(record.image_secondary_url.replace('\r',''))
                 if res.ok:
                     image = base64.b64encode(res.content)
                     record.image_secondary = image
