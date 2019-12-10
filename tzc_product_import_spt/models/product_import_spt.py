@@ -13,8 +13,9 @@ import base64
 
 class product_import_spt(models.Model):
     _name = 'product.import.spt'
-    _rec_name = 'attach_file_name'
+    # _rec_name = 'attach_file_name'
 
+    name = fields.Char('Name', default='New')
     date = fields.Date('Date')
     attach_file = fields.Binary("Attach File")
     attach_file_name = fields.Char("Attach File Name")
@@ -32,6 +33,11 @@ class product_import_spt(models.Model):
     ], string='State', default='draft')
 
     categ_id = fields.Many2one('product.category', 'Default Category')
+
+    @api.model
+    def create(self, vals):
+        vals['name'] = self.env['ir.sequence'].next_by_code('product.import.spt') or 'New'
+        return super(product_import_spt, self).create(vals)
 
     @api.multi
     def action_view_products(self):
@@ -253,9 +259,9 @@ class product_import_spt(models.Model):
                                 'is_active':bool(int(line[2])),
                                 'sale_ok':bool(int(line[3])),
                                 'purchase_ok':bool(int(line[4])),
-                                'list_price':float(line[5] or '0'),
-                                'standard_price':float(line[6] or '0'),
-                                'price_msrp': float(line[7] or '0'),
+                                'list_price':float(line[5].replace(' ', '') or '0'),
+                                'standard_price':float(line[6].replace(' ', '') or '0'),
+                                'price_msrp': float(line[7].replace(' ', '') or '0'),
                                 'type':line[8],
                                 'barcode':line[9],
                                 'brand':line[10],
@@ -268,8 +274,8 @@ class product_import_spt(models.Model):
                                 'image_1_url':line[15],
                                 'image_2_url':line[16],
                             }))
-                        except:
-                            raise UserError(_('File is formet is not proper!'))
+                        except Exception as e:
+                            raise e
                 record.import_line_ids = import_line_list
                 record.state = 'process'
 

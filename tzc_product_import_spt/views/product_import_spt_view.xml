@@ -14,6 +14,7 @@
 							<!-- <button name="action_set_to_done" string='Done' type="object" class="oe_stat_button" /> -->
 							<field name='state' widget='statusbar' />
 						</header>
+						
 						<div class="oe_button_box" name="button_box">
 							<button name="action_view_products" type="object" class="oe_stat_button" icon="fa-product-hunt" >
 								<div class="o_form_field o_stat_info" >
@@ -25,6 +26,11 @@
 									</span>
 								</div>
 							</button>
+						</div>
+						<div class="oe_title" >
+							<h1>
+								<field name="name" readonly="1" />
+							</h1>
 						</div>
 						<group>
 							<group>
@@ -70,14 +76,26 @@
 			</field>
 		</record>
 
+		<record model="ir.ui.view" id="tzc_product_product_inherit_kanban_view_spt">
+			<field name="name">tzc.product.product.inherit.kanban.view.spt</field>
+			<field name="inherit_id" ref="product.product_kanban_view"/>
+			<field name="model">product.product</field>
+			<field name="arch" type="xml">
+				<xpath expr="//div[hasclass('o_kanban_image')]/img" position="replace">
+					<img t-att-src="kanban_image('product.product', 'main_image', record.id.raw_value)" />
+				</xpath>
+			</field>
+		</record>
+
 		<record id="product_import_tree_view_spt" model="ir.ui.view">
 			<field name="name">product.import.tree.view.spt</field>
 			<field name="model">product.import.spt</field>
 			<field name="arch" type="xml">
 				<tree>
+					<field name="name" />
 					<field name="attach_file_name" />
 					<field name="date" />
-					<!-- <field name="server_id" /> -->
+					<field name="state" />
 				</tree>
 			</field>
 		</record>
