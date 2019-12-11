@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="ProductCategoriesWidget">
+	    <t t-jquery=".breadcrumbs" t-operation="after">
+            <span class="breadcrumb filter_spt">
+                <span class=" breadcrumb-button breadcrumb-filter js-filter-switch">
+                    <i class='fa fa-filter'></i>
+                </span>
+            </span>
+        </t>
+    </t>
+
+    <t t-extend="ProductScreenWidget">
+        <t t-jquery="div.leftpane" t-operation="before">
+            <!--   Off Canvas Nav - BEGIN -->
+            <div class="overlay_filter"></div>
+            <nav class="offCanvas">
+                <div class="navProfile">
+                    <div class="avatarName">Product filters</div>
+                </div>
+                <!-- <ul>
+                    <li><i class="fa fa-book" aria-hidden="true"></i><span>Diary</span></li>
+                    <li><i class="fa fa-bar-chart" aria-hidden="true"></i><span>Progess</span></li>
+                    <li><i class="fa fa-calendar-o" aria-hidden="true"></i><span>Calendar</span></li>
+                    <li><i class="fa fa-bell-o" aria-hidden="true"></i><span>Reminders</span></li>
+                    <li><i class="fa fa-apple" aria-hidden="true"></i><span>Food</span></li>
+                </ul> -->
+                <!-- <t t-foreach="widget.pos.db.product_attribute_by_id" t-as="pro_attr">
+                    <div class="item">
+                        <span t-esc="pro_attr.name"/> -->
+                        <!-- <img class="product_img" t-att-data-product-id="pro_img" t-attf-src="/web/image/pos.multi.image/#{pro_img}/image" alt="The Last of us" width="100%" height="520px"/> -->
+                    <!-- </div>
+                </t> -->
+
+                <ul id="accordion" class="accordion">
+                    <t t-foreach="widget.pos.db.product_attribute_by_id" t-as="pro_attr">
+                        <t t-log="pro_attr['name']"/>
+                        <li>
+                            <div class="link" t-att-data-id="pro_attr" t-att-value="pro_attr.id">
+                                <i class="fa fa-database"></i>
+                                    <t t-esc="pro_attr.id"/>
+                                <i class="fa fa-chevron-down"></i>
+                            </div>
+                        </li>
+                    </t>
+                    <li>
+                        <div class="link"><i class="fa fa-database"></i>Web Design<i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                        <li><a href="#">Photoshop</a></li>
+                        <li><a href="#">HTML</a></li>
+                        <li><a href="#">CSS</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-code"></i>Coding<i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                        <li><a href="#">Javascript</a></li>
+                        <li><a href="#">jQuery</a></li>
+                        <li><a href="#">Ruby</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-mobile"></i>Devices<i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                        <li><a href="#">Tablet</a></li>
+                        <li><a href="#">Mobile</a></li>
+                        <li><a href="#">Desktop</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="link"><i class="fa fa-globe"></i>Global<i class="fa fa-chevron-down"></i></div>
+                        <ul class="submenu">
+                        <li><a href="#">Google</a></li>
+                        <li><a href="#">Bing</a></li>
+                        <li><a href="#">Yahoo</a></li>
+                        </ul>
+                    </li>
+                    </ul>
+            </nav>
+        </t>
+    </t>
+    <!-- <t t-name="MultiImgPopupWidget">
+        <div class="modal-dialog">
+            <style>
+            .bx-wrapper {
+                position: relative;
+                margin-bottom: 0px;
+                }
+            </style>
+            <div class="popup" style="width:900px;height: 600px;">
+                <div class="content-container " style="overflow: scroll;height: 540px;">
+                    <ul class="bxslider">
+                        <t t-if="widget.options.product">
+                            <img t-attf-src="data:image/png;base64,#{widget.options.product.image}" alt="Product Image" />
+                            <img t-attf-src="data:image/png;base64,#{widget.options.product.image_secondary}" alt="Secondary Image" />
+                            <t t-foreach="widget.options.product.product_multi_img_id" t-as="pro_img">
+                                <div class="item">
+                                    <img class="product_img" t-att-data-product-id="pro_img" t-attf-src="/web/image/pos.multi.image/#{pro_img}/image" alt="The Last of us" width="100%" height="520px"/>
+                                </div>
+                            </t>
+                        </t>
+                    </ul>
+                </div>
+                <div class="footer">
+                    <div class="button add_to_cart_button">
+                        Add to Cart
+                    </div>
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t> -->
+</templates>

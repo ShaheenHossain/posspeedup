@@ -5,6 +5,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import base64
+import csv
 # try:
 #     import paramiko
 # except ImportError:
@@ -17,9 +18,13 @@ class product_import_spt(models.Model):
 
     name = fields.Char('Name', default='New')
     date = fields.Date('Date')
+
     attach_file = fields.Binary("Attach File")
     attach_file_name = fields.Char("Attach File Name")
 
+    wrong_lines_name = fields.Char("Wrong Lines Name")
+    wrong_lines = fields.Binary("Wrong Lines")
+    
     import_line_ids = fields.One2many('product.import.line.spt', 'import_id', 'Product Lines')
 
     number_of_product = fields.Integer('Number Of Product', compute='_get_number_of_product')
@@ -245,12 +250,14 @@ class product_import_spt(models.Model):
         for record in self:
             if record.attach_file:
                 file_data = base64.b64decode(record.attach_file).decode("UTF-8").split('\n')
-                file_data.pop(0)
+                heading = file_data.pop(0)
                 import_line_list = []
                 record.import_line_ids.unlink()
+                wrong_lines = [heading.split(',')]
                 for line in file_data:
                     if line:
                         line = line.split(',')
+
                         print(line[0])
                         try:
                             import_line_list.append((0,0,{
@@ -275,7 +282,24 @@ class product_import_spt(models.Model):
                                 'image_2_url':line[16],
                             }))
                         except Exception as e:
+
+                            # raise UserError(_("%s") % (e))
+                            wrong_lines.append(line)
+                record.wrong_lines_name = ''
+                record.wrong_lines = False
+                if len(wrong_lines) > 1:
+                    with open('wrong.csv', 'w') as file:
+                        writer = csv.writer(file)
+                        writer.writerows(wrong_lines)
+                        # out = file.read()
+                    with open('wrong.csv', 'rb') as file:
+                        out = file.read()
+                    record.wrong_lines_name = 'Wrong_product.csv'
+                    record.wrong_lines = base64.b64encode(out)
+                
+
                             raise e
+
                 record.import_line_ids = import_line_list
                 record.state = 'process'
 
