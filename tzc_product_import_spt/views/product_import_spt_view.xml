@@ -36,6 +36,8 @@
 							<group>
 								<field name="attach_file_name" invisible='1' />
 								<field name="attach_file" filename="attach_file_name" required='1' />
+								<field name="wrong_lines_name" invisible='1' />
+								<field name="wrong_lines" filename="wrong_lines_name" required='0' readonly='1' />
 								<!-- <field name="categ_id" /> -->
 								<!-- <field name="image_path" required='1'/> -->
 							</group>

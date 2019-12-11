@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="PaymentScreenWidget">
+        <t t-jquery=".payment-buttons" t-operation="append">
+            <t t-if='widget.pos.config.allow_partial_pay'>
+                <div class='button partially_pay highlight'>
+                    <i class="fa fa-money" aria-hidden="true"></i> Partially Pay
+                </div>
+            </t>
+        </t>
+    </t>
+
+    
+    <t t-extend="PosTicket">
+        <t t-jquery="tr[class='emph']" t-operation='after'>
+            <t t-if='widget.pos.config.allow_partial_pay'>
+                <t t-if="(order.get_total_with_tax() - order.get_total_paid()) > 0">
+                    <tr class="emph">
+                        <td>Remaining:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_total_with_tax() - order.get_total_paid())"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </t>
+
+</templates>

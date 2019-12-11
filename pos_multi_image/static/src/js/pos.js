@@ -10,7 +10,7 @@ odoo.define('pos_multi_image.pos_multi_image', function (require) {
     var _t = core._t;
 
 
-    models.load_fields("product.product",['product_multi_img_id','image','image_secondary']);
+    models.load_fields("product.product",['product_multi_img_id','image','image_secondary','attribute_value_ids']);
     
     screens.ProductScreenWidget.include({
         show: function(){
@@ -19,7 +19,7 @@ odoo.define('pos_multi_image.pos_multi_image', function (require) {
             $(".product_review").click(function(event){
                 var product_id = $(this).attr("data-product-id");
                 var product = self.pos.db.get_product_by_id(product_id);
-                // debugger;
+                debugger;
                 self.gui.show_popup('multi-img-popup',{'product':product});
                 event.preventDefault();
                 event.stopPropagation();
@@ -38,8 +38,9 @@ odoo.define('pos_multi_image.pos_multi_image', function (require) {
                 auto: false,
                 autoControls: true,
                 stopAutoOnClick: true,
-                pager: false,
-                slideWidth: 1360,
+                pager: true,
+                slideWidth: 900,
+                adaptiveHeight: true,
             });
             $(".add_to_cart_button").click(function(){
                 var order = self.pos.get_order();
@@ -59,5 +60,7 @@ odoo.define('pos_multi_image.pos_multi_image', function (require) {
         'name': 'multi-img-popup', 
         'widget': MultiImgPopupWidget,
     });
+
+    
 
 });
