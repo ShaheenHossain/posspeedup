@@ -282,6 +282,7 @@ class product_import_spt(models.Model):
                                 'image_2_url':line[16],
                             }))
                         except Exception as e:
+
                             # raise UserError(_("%s") % (e))
                             wrong_lines.append(line)
                 record.wrong_lines_name = ''
@@ -296,6 +297,9 @@ class product_import_spt(models.Model):
                     record.wrong_lines_name = 'Wrong_product.csv'
                     record.wrong_lines = base64.b64encode(out)
                 
+
+                            raise e
+
                 record.import_line_ids = import_line_list
                 record.state = 'process'
 
