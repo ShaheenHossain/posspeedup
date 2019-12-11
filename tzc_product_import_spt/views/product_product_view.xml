@@ -67,6 +67,19 @@
             </field>
         </record>
 
+        <record id="tzc_inherit_product_product_search_view_spt" model="ir.ui.view">
+            <field name="name">tzc.inherit.product.product.search.view.spt</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_tmpl_id']" position="after">
+                    <field name='brand' />
+                    <field name='model' />
+                </xpath>
+            </field>
+        </record>
+
+
     </data>
 </odoo>
 
