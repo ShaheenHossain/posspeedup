@@ -16,7 +16,7 @@ var _t = core._t;
             var self = this;
             this._super();
             this.$('.partially_pay').click(function(){
-                debugger;
+                //debugger;
                 var order = self.pos.get_order();
 
             	// var total_amount = order.get_total_with_tax();
@@ -99,7 +99,7 @@ var _t = core._t;
             var self = this;
             this._super();
 
-            debugger;
+            //debugger;
             var order = this.pos.get_order();
             order.set_to_invoice(true);
             
