@@ -19,11 +19,11 @@ class product_import_spt(models.Model):
     name = fields.Char('Name', default='New')
     date = fields.Date('Date')
 
-    attach_file = fields.Binary("Attach File")
-    attach_file_name = fields.Char("Attach File Name")
+    attach_file = fields.Binary("Attached File")
+    attach_file_name = fields.Char("Attached File Name")
 
-    wrong_lines_name = fields.Char("Wrong Lines Name")
-    wrong_lines = fields.Binary("Wrong Lines")
+    wrong_lines_name = fields.Char("Wrong Products")
+    wrong_lines = fields.Binary("Wrong Products")
     
     import_line_ids = fields.One2many('product.import.line.spt', 'import_id', 'Product Lines')
 

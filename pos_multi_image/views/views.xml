@@ -51,8 +51,8 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//notebook" position="inside">
-                    <page string="Multi Images">
-                        <group name="pos_multi_image" string="Point of Sale Multi Image">
+                    <page string="Additional Images">
+                        <group name="pos_multi_image" string="Point of Sale Additional Images">
                            <div>
                                 <field name="product_multi_img_id">
                                     <tree editable="bottom">

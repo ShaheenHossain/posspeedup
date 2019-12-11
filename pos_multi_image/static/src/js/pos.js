@@ -10,8 +10,15 @@ odoo.define('pos_multi_image.pos_multi_image', function (require) {
     var _t = core._t;
 
 
-    models.load_fields("product.product",['product_multi_img_id','image','image_secondary','attribute_value_ids']);
-    
+    models.load_fields("product.product",['product_multi_img_id','image','main_image','image_secondary','attribute_value_ids']);
+
+    screens.ProductListWidget.include({
+        get_product_image_url: function(product){
+            //debugger;
+            return window.location.origin + '/web/image?model=product.product&field=main_image&id='+product.id;
+        },
+    });  
+
     screens.ProductScreenWidget.include({
         show: function(){
             var self = this;
@@ -19,7 +26,7 @@ odoo.define('pos_multi_image.pos_multi_image', function (require) {
             $(".product_review").click(function(event){
                 var product_id = $(this).attr("data-product-id");
                 var product = self.pos.db.get_product_by_id(product_id);
-                debugger;
+                //debugger;
                 self.gui.show_popup('multi-img-popup',{'product':product});
                 event.preventDefault();
                 event.stopPropagation();

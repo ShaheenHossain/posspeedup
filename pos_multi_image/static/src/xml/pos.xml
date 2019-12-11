@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
-        <t t-extend="Product">
+    <t t-extend="Product">
         <t t-jquery=".price-tag" t-operation="append">
             <t t-if='widget.pos.config.allow_multi_image'>
                 <span class="price-tag product_review" style="top: 94px;z-index: 1;background: green;" t-att-data-product-id="product.id">
@@ -21,7 +21,7 @@
                 <div class="content-container " style="overflow: scroll;height: 540px;">
                     <ul class="bxslider">
                         <t t-if="widget.options.product">
-                            <img t-attf-src="data:image/png;base64,#{widget.options.product.image}" alt="Product Image" />
+                            <img t-attf-src="data:image/png;base64,#{widget.options.product.main_image}" alt="Product Image" />
                             <img t-attf-src="data:image/png;base64,#{widget.options.product.image_secondary}" alt="Secondary Image" />
                             <t t-foreach="widget.options.product.product_multi_img_id" t-as="pro_img">
                                 <div class="item">

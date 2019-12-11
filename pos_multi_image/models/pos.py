@@ -21,5 +21,5 @@ class product_product(models.Model):
 class pos_config(models.Model):
     _inherit = 'pos.config' 
     
-    allow_multi_image = fields.Boolean(string='Allow multi image')
+    allow_multi_image = fields.Boolean(string='Allow multi image',default=True)
     
