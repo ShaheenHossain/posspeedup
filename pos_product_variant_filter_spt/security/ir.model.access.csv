@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-pos_product_variant_filter_spt_id,pos_product_variant_filter_spt,model_pos_product_variant_filter_spt,,1,1,1,1

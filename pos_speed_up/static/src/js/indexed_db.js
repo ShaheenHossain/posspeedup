@@ -15,6 +15,7 @@ odoo.define('pos_speed_up.indexedDB', function (require) {
 
     var exports = {
         get_object_store: function (_name) {
+            debugger;
             var done = new $.Deferred();
 
             var request = indexedDB.open(db_name, 1);
@@ -30,6 +31,7 @@ odoo.define('pos_speed_up.indexedDB', function (require) {
             };
 
             request.onsuccess = function (ev) {
+                debugger;
                 var db = ev.target.result;
 
                 var transaction = db.transaction([_name], "readwrite");
@@ -54,6 +56,7 @@ odoo.define('pos_speed_up.indexedDB', function (require) {
             return done.promise();
         },
         save: function (_name, items) {
+            debugger;
             $.when(this.get_object_store(_name))
                 .done(function (store) {
                     localStorage.setItem(_name, 'cached');
@@ -72,6 +75,7 @@ odoo.define('pos_speed_up.indexedDB', function (require) {
             return localStorage.getItem(_name) === 'cached';
         },
         get: function (_name) {
+            debugger;
             var done = new $.Deferred();
             $.when(this.get_object_store(_name))
                 .done(function (store) {

@@ -53,7 +53,7 @@ odoo.define('pos_speed_up.optimize_load_products', function (require) {
                     var done = new $.Deferred();
 
                     indexedDB.get('products').then(function (products) {
-
+                        debugger;
                         products = products.concat(new_products).filter(function (value) {
                             return data_change['delete'].indexOf(value.id) === -1;
                         });
@@ -66,11 +66,13 @@ odoo.define('pos_speed_up.optimize_load_products', function (require) {
                         done.resolve();
 
                     }).fail(function (error) {
+                        debugger;
                         console.log(error);
                         done.reject();
                     });
 
                     // put and delete product - indexedDB
+                    debugger;
                     indexedDB.get_object_store('products').then(function (store) {
                         _.each(new_products, function (product) {
                             store.put(product).onerror = function (ev) {
@@ -96,6 +98,7 @@ odoo.define('pos_speed_up.optimize_load_products', function (require) {
         p_save: function (model) {
             this.p_super_loaded = model.loaded;
             model.loaded = function (self, products) {
+                debugger;
                 indexedDB.save('products', products);
                 self.p_super_loaded(self, products);
             };

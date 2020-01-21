@@ -13,6 +13,7 @@ odoo.define('pos_speed_up.pos_model', function (require) {
 
             var wait = this.get_model('res.users');
             if (wait) {
+                debugger;
                 var _super_loaded = wait.loaded;
                 wait.loaded = function (self, users) {
                     var def = $.Deferred();

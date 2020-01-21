@@ -12,7 +12,8 @@ odoo.define('product_variant_filter_spt.pos', function (require) {
     var _t = core._t;
 
 
-    models.load_fields("product.product",['attribute_value_ids']);
+    models.load_fields("product.product",['attribute_value_ids','brand','model']);
+
     models.load_models([{
 		model:  'product.attribute',
         fields: ['name', 'value_ids','type'],
@@ -22,15 +23,37 @@ odoo.define('product_variant_filter_spt.pos', function (require) {
                 attribute_by_id[attribute.id] = attribute;
             });
 
+            //debugger;
             self.product_attributes = product_attributes;
             self.db.add_product_attributes(product_attributes);
-        }
 
+            var pos_products_bm = self.db.product_by_id;
+
+            var product_brands = Object.values(pos_products_bm).filter(function (product) {
+                return product.brand != false;
+            }).map(function (product_b){
+                return product_b.brand;
+            });
+
+            let product_uniq_brand = [...new Set(product_brands)];
+            self.product_brands = product_uniq_brand;
+
+            var product_models = Object.values(pos_products_bm).filter(function (product) {
+                return product.model != false;
+            }).map(function (product_m){
+                return product_m.model;
+            });
+
+            let product_uniq_models = [...new Set(product_models)];
+            self.product_models = product_uniq_models;
+
+        }
     },
     {
         model:  'product.attribute.value',
         fields: [  'name',
                 'attribute_id',
+                'html_color'
                 ],
         loaded: function(self,values){
             self.product_attribute_values = values;
@@ -40,27 +63,64 @@ odoo.define('product_variant_filter_spt.pos', function (require) {
     
     screens.ProductCategoriesWidget.include({
         renderElement: function () {
-            debugger;
+            //debugger;
 			var self = this;
-			this._super();
+            this._super();
+            self.pos.filter_ids = [];
             
             this.el.querySelector('.filter_spt').addEventListener('click', function () {
-                debugger;
+                //debugger;
                 
                 $('.offCanvas').toggleClass('left0');
                 $('.overlay_filter').toggleClass('visible');
 
             });
+
+            this.el.querySelector('.clear_filter').addEventListener('click', function () {
+                //debugger;
+                $('.filter_chk:checkbox').removeAttr('checked');
+                // var filter_ids = [];
+                // $('.submenu').css("display","none");
+                var pos_products = self.pos.db.get_product_by_category(self.category.id);
+                self.product_list_widget.set_product_list(Object.values(pos_products));
+                self.pos.filter_ids = [];
+                self.pos.product_filtered = pos_products;
+                $('.filter_clear_spt').hide("fast");
+            });
+            
 		},
     });
     
     screens.ProductScreenWidget.include({
+        start: function () {
+			var self = this;
+            self._super();
+            //debugger;
+        },
         show: function () {
+            //debugger;
 			this._super();
             var self = this;
             
+            // var filter_ids = [];
+            
+            var Accordion = function(el, multiple) {
+                //debugger;
+                this.el = el || {};
+                this.multiple = multiple || false;
+        
+                // Variables privadas
+                var links = this.el.find('.link');
+                // Evento
+                links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown);
+                //debugger;
+                var selection = this.el.find('.filter_chk');
+                selection.on('change', {el: this.el, multiple: this.multiple}, this.filter);
+            }
+
+            
             this.el.querySelector('.overlay_filter').addEventListener('click', function () {
-                debugger;
+                //debugger;
                 $('.offCanvas').removeClass('left0');
                 $('.overlay_filter').removeClass('visible');
                 
@@ -72,40 +132,10 @@ odoo.define('product_variant_filter_spt.pos', function (require) {
             });
 
 
-            // this.product_variant_widget = new ProductVariantWidget(this,{
-            //     product_list_widget: this.product_list_widget,
-            // });
-            // this.product_variant_widget.replace(this.$('.placeholder-ProductVariantWidget'));
-
-            // debugger;
-            // var product_tmpl_id = self.gui.get_current_screen_param('product_tmpl_id');
-			// var template = this.pos.db.template_by_id[product_tmpl_id];
-			// this.$('#variant-title-name').html(template.name);
-
-			// // Render Variants
-			// var variant_ids = this.pos.db.template_by_id[product_tmpl_id].product_variant_ids;
-			// var variant_list = [];
-			// for (var i = 0, len = variant_ids.length; i < len; i++) {
-			// 	variant_list.push(this.pos.db.get_product_by_id(variant_ids[i]));
-			// }
-			// var attribute_ids = this.pos.db.attribute_by_template_id(template.id);
-			// var attribute_list = [];
-			// for (var i = 0, len = attribute_ids.length; i < len; i++) {
-			// 	attribute_list.push(this.pos.db.get_product_attribute_by_id(attribute_ids[i]));
-			// }
-
-            var Accordion = function(el, multiple) {
-                debugger;
-                this.el = el || {};
-                this.multiple = multiple || false;
-        
-                // Variables privadas
-                var links = this.el.find('.link');
-                // Evento
-                links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
-            }
+            
         
             Accordion.prototype.dropdown = function(e) {
+               
                 var $el = e.data.el;
                 var $this = $(this);
                 var $next = $this.next();
@@ -117,141 +147,54 @@ odoo.define('product_variant_filter_spt.pos', function (require) {
                     $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
                 };
             }	
+
+            Accordion.prototype.filter = function(e) 
+            {
+                //debugger;
+                var $this = $(this);
+
+                var current_id = parseInt($this.attr('id'))?parseInt($this.attr('id')):$this.val();
+                
+                if($this.is(":checked")){
+                    self.pos.filter_ids.push(current_id);
+                }
+                else{
+                    for( var i = 0; i < self.pos.filter_ids.length; i++){ 
+                        if ( self.pos.filter_ids[i] === current_id) {
+                            self.pos.filter_ids.splice(i, 1); 
+                        }
+                     }
+                }
+
+                var pos_products = self.pos.db.get_product_by_category(self.product_categories_widget.category.id)
+                // self.pos.db.product_by_id;
+                // self.pos.db.get_product_by_category(self.product_categories_widget.category.id)
+
+                if (self.pos.filter_ids.length > 0){
+                     // var filterd_products = products.filter()
+                    var filterd_products = Object.values(pos_products).filter(function (product) {
+                        return (product.attribute_value_ids.some(p=> self.pos.filter_ids.indexOf(p) >= 0) || 
+                            self.pos.filter_ids.indexOf(product.brand) > -1 || 
+                            self.pos.filter_ids.indexOf(product.model) > -1);
+                    });
+
+                    self.product_list_widget.set_product_list(filterd_products);
+                    self.pos.product_filtered = filterd_products;
+                    $('.filter_clear_spt').show("fast");
+                    //debugger;
+                }
+                else{
+                    self.product_list_widget.set_product_list(Object.values(pos_products));
+                    self.pos.product_filtered = pos_products;
+                    $('.filter_clear_spt').hide("fast");
+                }
+            }
         
             var accordion = new Accordion($('#accordion'), false);
         }
     });
 
-    // var ProductVariantWidget = PosBaseWidget.extend({
-    //     template: 'ProductVariantWidget',
-    //     init: function(parent, options){
-    //         debugger;
-    //         var self = this;
-    //         this._super(parent,options);
-    //         this.product_type = options.product_type || 'all';  // 'all' | 'weightable'
-    //         this.onlyWeightable = options.onlyWeightable || false;
-    //         this.category = this.pos.root_category;
-    //         this.breadcrumb = [];
-    //         this.product_list_widget = options.product_list_widget || null;
-    //         this.start_categ_id = this.pos.config.iface_start_categ_id ? this.pos.config.iface_start_categ_id[0] : 0;
-    //         this.set_category(this.pos.db.get_category_by_id(this.start_categ_id));
-            
-    //         this.switch_category_handler = function(event){
-    //             self.set_category(self.pos.db.get_category_by_id(Number(this.dataset.categoryId)));
-    //             self.renderElement();
-    //         };
-            
-    //         this.clear_search_handler = function(event){
-    //             self.clear_search();
-    //         };
     
-    //         var search_timeout  = null;
-    //         this.search_handler = function(event){
-    //             if(event.type == "keypress" || event.keyCode === 46 || event.keyCode === 8){
-    //                 clearTimeout(search_timeout);
-    
-    //                 var searchbox = this;
-    
-    //                 search_timeout = setTimeout(function(){
-    //                     self.perform_search(self.category, searchbox.value, event.which === 13);
-    //                 },70);
-    //             }
-    //         };
-    //     },
-    
-    //     // changes the category. if undefined, sets to root category
-    //     set_category : function(category){
-    //         var db = this.pos.db;
-    //         if(!category){
-    //             this.category = db.get_category_by_id(db.root_category_id);
-    //         }else{
-    //             this.category = category;
-    //         }
-    //         this.breadcrumb = [];
-    //         var ancestors_ids = db.get_category_ancestors_ids(this.category.id);
-    //         for(var i = 1; i < ancestors_ids.length; i++){
-    //             this.breadcrumb.push(db.get_category_by_id(ancestors_ids[i]));
-    //         }
-    //         if(this.category.id !== db.root_category_id){
-    //             this.breadcrumb.push(this.category);
-    //         }
-    //         debugger;
-    //     },
-    
-    //     render_category: function( category, with_image ){
-    //         var category_html = QWeb.render('CategorySimpleButton',{ 
-    //                 widget:  this, 
-    //                 category: category, 
-    //             });
-    //             category_html = _.str.trim(category_html);
-    //         var category_node = document.createElement('div');
-    //             category_node.innerHTML = category_html;
-    //             category_node = category_node.childNodes[0];
-    //         return category_node;
-    //     },
-    
-    //     renderElement: function(){
-    
-    //         var el_str  = QWeb.render(this.template, {widget: this});
-    //         var el_node = document.createElement('div');
-    
-    //         el_node.innerHTML = el_str;
-    //         el_node = el_node.childNodes[1];
-    
-    //         if(this.el && this.el.parentNode){
-    //             this.el.parentNode.replaceChild(el_node,this.el);
-    //         }
-    
-    //         this.el = el_node;
-    
-    //         var withpics = this.pos.config.iface_display_categ_images;
-    
-    //         var list_container = el_node.querySelector('.category-list');
-    //         if (list_container) { 
-    //             debugger;
-    //             if (!withpics) {
-    //                 list_container.classList.add('simple');
-    //             } else {
-    //                 list_container.classList.remove('simple');
-    //             }
-    //         }
-    
-    //         var buttons = el_node.querySelectorAll('.js-category-switch');
-    //         for(var i = 0; i < buttons.length; i++){
-    //             buttons[i].addEventListener('click',this.switch_category_handler);
-    //         }
-    
-    //         var products = this.pos.db.get_product_by_category(this.category.id); 
-    //         this.product_list_widget.set_product_list(products); // FIXME: this should be moved elsewhere ... 
-    
-    //         this.el.querySelector('.searchbox input').addEventListener('keypress',this.search_handler);
-    
-    //         this.el.querySelector('.searchbox input').addEventListener('keydown',this.search_handler);
-    
-    //         this.el.querySelector('.search-clear').addEventListener('click',this.clear_search_handler);
-    
-    //         if(this.pos.config.iface_vkeyboard && this.chrome.widget.keyboard){
-    //             this.chrome.widget.keyboard.connect($(this.el.querySelector('.searchbox input')));
-    //         }
-    //     },
-    
-    // });
-
-    // screens.ProductScreenWidget.include({
-    //     show: function(){
-    //         var self = this;
-    //         this._super();
-    //         $(".product_review").click(function(event){
-    //             var product_id = $(this).attr("data-product-id");
-    //             var product = self.pos.db.get_product_by_id(product_id);
-    //             debugger;
-    //             self.gui.show_popup('multi-img-popup',{'product':product});
-    //             event.preventDefault();
-    //             event.stopPropagation();
-    //         });
-    //     },
-
-    // }); 
     
     DB.include({
         init: function(options){
