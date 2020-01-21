@@ -129,6 +129,7 @@ odoo.define('pos_speed_up.change_detector', function (require) {
                 method: 'sync_not_reload',
                 args: [client_version, model.fields]
             }).then(function (res) {
+                debugger;
                 localStorage.setItem('product_index_version', res['latest_version']);
 
                 // increase count
@@ -141,17 +142,20 @@ odoo.define('pos_speed_up.change_detector', function (require) {
                 indexedDB.get_object_store('products').then(function (store) {
                     _.each(res['create'], function (record) {
                         store.put(record).onerror = function (e) {
+                            debugger;
                             console.log(e);
                             localStorage.setItem('product_index_version', client_version);
                         }
                     });
                     _.each(res['delete'], function (id) {
                         store.delete(id).onerror = function (e) {
+                            debugger;
                             console.log(e);
                             localStorage.setItem('product_index_version', client_version);
                         };
                     });
                 }).fail(function (error){
+                    debugger;
                     console.log(error);
                     localStorage.setItem('product_index_version', client_version);
                 });
@@ -176,6 +180,7 @@ odoo.define('pos_speed_up.change_detector', function (require) {
                 method: 'sync_not_reload',
                 args: [client_version, model.fields]
             }).then(function (res) {
+                debugger;
                 localStorage.setItem('customer_index_version', res['latest_version']);
 
                 self.pos.count_sync += res['create'].length + res['delete'].length;
@@ -187,17 +192,20 @@ odoo.define('pos_speed_up.change_detector', function (require) {
                 indexedDB.get_object_store('customers').then(function (store) {
                     _.each(res['create'], function (record) {
                         store.put(record).onerror = function (e) {
+                            debugger;
                             console.log(e);
                             localStorage.setItem('customer_index_version', client_version);
                         }
                     });
                     _.each(res['delete'], function (id) {
                         store.delete(id).onerror = function (e) {
+                            debugger;
                             console.log(e);
                             localStorage.setItem('customer_index_version', client_version);
                         };
                     });
                 }).fail(function (error) {
+                    debugger;
                     console.log(error);
                     localStorage.setItem('customer_index_version', client_version);
                 });

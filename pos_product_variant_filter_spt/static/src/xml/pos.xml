@@ -3,10 +3,15 @@
 
     <t t-extend="ProductCategoriesWidget">
 	    <t t-jquery=".breadcrumbs" t-operation="after">
-            <span class="breadcrumb filter_spt">
+            <span class="breadcrumb filter_spt" title="Open Filter Menu">
                 <span class=" breadcrumb-button breadcrumb-filter js-filter-switch">
                     <i class='fa fa-filter'></i>
                 </span>
+            </span>
+            <span class="breadcrumb filter_clear_spt" style="display: none;height: unset;line-height: unset;min-width: unset;">
+                <div class='clear_filter' title="Reset Filter" style="top: 10px;">
+                    <i class='fa fa-refresh'></i>
+                </div>
             </span>
         </t>
     </t>
@@ -15,102 +20,80 @@
         <t t-jquery="div.leftpane" t-operation="before">
             <!--   Off Canvas Nav - BEGIN -->
             <div class="overlay_filter"></div>
+            
             <nav class="offCanvas">
                 <div class="navProfile">
                     <div class="avatarName">Product filters</div>
                 </div>
-                <!-- <ul>
-                    <li><i class="fa fa-book" aria-hidden="true"></i><span>Diary</span></li>
-                    <li><i class="fa fa-bar-chart" aria-hidden="true"></i><span>Progess</span></li>
-                    <li><i class="fa fa-calendar-o" aria-hidden="true"></i><span>Calendar</span></li>
-                    <li><i class="fa fa-bell-o" aria-hidden="true"></i><span>Reminders</span></li>
-                    <li><i class="fa fa-apple" aria-hidden="true"></i><span>Food</span></li>
-                </ul> -->
-                <!-- <t t-foreach="widget.pos.db.product_attribute_by_id" t-as="pro_attr">
-                    <div class="item">
-                        <span t-esc="pro_attr.name"/> -->
-                        <!-- <img class="product_img" t-att-data-product-id="pro_img" t-attf-src="/web/image/pos.multi.image/#{pro_img}/image" alt="The Last of us" width="100%" height="520px"/> -->
-                    <!-- </div>
-                </t> -->
-
+               
                 <ul id="accordion" class="accordion">
-                    <t t-foreach="widget.pos.db.product_attribute_by_id" t-as="pro_attr">
-                        <t t-log="pro_attr['name']"/>
+                    <!-- product brands -->
+                    <li t-if="widget.pos.product_brands.length>0">
+                        <div class="link" value="brand">
+                            <i class="fa fa-ticket"></i>
+                                Brands
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <ul class="submenu dropdown_variable">
+                            <t t-foreach="widget.pos.product_brands" t-as="pro_brand">
+                                <li>
+                                    <label><t t-esc="pro_brand"/>
+                                        <input type="checkbox" class="filter_chk" t-att-name="brand" t-att-value="pro_brand" />
+                                        <span></span>
+                                    </label>
+                                </li>
+                            </t>
+                        </ul>
+                    </li>
+
+                    <!-- product Models -->
+                    <li t-if="widget.pos.product_models.length>0">
+                        <div class="link" value="model">
+                            <i class="fa fa-anchor"></i>
+                                Models
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <ul class="submenu dropdown_variable">
+                            <t t-foreach="widget.pos.product_models" t-as="pro_model">
+                                <li>
+                                    <label><t t-esc="pro_model"/>
+                                        <input type="checkbox" class="filter_chk" t-att-name="model" t-att-value="pro_model" />
+                                        <span></span>
+                                    </label>
+                                </li>
+                            </t>
+                        </ul>
+                    </li>
+
+                    <span class="filter_devider"/>
+
+                    <t t-foreach="widget.pos.product_attributes" t-as="pro_attr">
+                        <!-- <t t-log="pro_attr['name']"/>
+                        <t t-log="pro_attr.name"/> -->
                         <li>
-                            <div class="link" t-att-data-id="pro_attr" t-att-value="pro_attr.id">
-                                <i class="fa fa-database"></i>
-                                    <t t-esc="pro_attr.id"/>
+                            <div class="link" t-att-data-id="pro_attr.id" t-att-value="pro_attr.name">
+                                <i class="fa fa-cog"></i>
+                                    <t t-esc="pro_attr.name"/>
                                 <i class="fa fa-chevron-down"></i>
                             </div>
+                            <ul class="submenu dropdown_variable">
+                                <t t-foreach="widget.pos.product_attribute_values" t-as="pro_attr_val">
+                                    <li t-if="pro_attr.id==pro_attr_val.attribute_id[0]">
+                                        <label><t t-esc="pro_attr_val.name"/>
+                                            <input type="checkbox" class="filter_chk" t-att-name="pro_attr.name" t-att-id="pro_attr_val.id" t-att-value="pro_attr_val.name" />
+                                            <div t-if="pro_attr.name=='Color'" class="var_color" t-attf-style="background-color:#{pro_attr_val.html_color or pro_attr_val.name}"></div>
+                                            <span></span>
+                                        </label>
+                                    </li>
+                                </t>
+                            </ul>
                         </li>
                     </t>
-                    <li>
-                        <div class="link"><i class="fa fa-database"></i>Web Design<i class="fa fa-chevron-down"></i></div>
-                        <ul class="submenu">
-                        <li><a href="#">Photoshop</a></li>
-                        <li><a href="#">HTML</a></li>
-                        <li><a href="#">CSS</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="link"><i class="fa fa-code"></i>Coding<i class="fa fa-chevron-down"></i></div>
-                        <ul class="submenu">
-                        <li><a href="#">Javascript</a></li>
-                        <li><a href="#">jQuery</a></li>
-                        <li><a href="#">Ruby</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="link"><i class="fa fa-mobile"></i>Devices<i class="fa fa-chevron-down"></i></div>
-                        <ul class="submenu">
-                        <li><a href="#">Tablet</a></li>
-                        <li><a href="#">Mobile</a></li>
-                        <li><a href="#">Desktop</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="link"><i class="fa fa-globe"></i>Global<i class="fa fa-chevron-down"></i></div>
-                        <ul class="submenu">
-                        <li><a href="#">Google</a></li>
-                        <li><a href="#">Bing</a></li>
-                        <li><a href="#">Yahoo</a></li>
-                        </ul>
-                    </li>
-                    </ul>
+
+                    
+
+                </ul>
             </nav>
         </t>
     </t>
-    <!-- <t t-name="MultiImgPopupWidget">
-        <div class="modal-dialog">
-            <style>
-            .bx-wrapper {
-                position: relative;
-                margin-bottom: 0px;
-                }
-            </style>
-            <div class="popup" style="width:900px;height: 600px;">
-                <div class="content-container " style="overflow: scroll;height: 540px;">
-                    <ul class="bxslider">
-                        <t t-if="widget.options.product">
-                            <img t-attf-src="data:image/png;base64,#{widget.options.product.image}" alt="Product Image" />
-                            <img t-attf-src="data:image/png;base64,#{widget.options.product.image_secondary}" alt="Secondary Image" />
-                            <t t-foreach="widget.options.product.product_multi_img_id" t-as="pro_img">
-                                <div class="item">
-                                    <img class="product_img" t-att-data-product-id="pro_img" t-attf-src="/web/image/pos.multi.image/#{pro_img}/image" alt="The Last of us" width="100%" height="520px"/>
-                                </div>
-                            </t>
-                        </t>
-                    </ul>
-                </div>
-                <div class="footer">
-                    <div class="button add_to_cart_button">
-                        Add to Cart
-                    </div>
-                    <div class="button cancel">
-                        Cancel 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </t> -->
 </templates>

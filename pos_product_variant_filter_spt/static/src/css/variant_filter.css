@@ -71,7 +71,7 @@
     background-color: #7f82ac;
     font-size: large;
     font-weight: bold;
-
+    box-shadow: 0px 3px 12px 4px rgba(0, 0, 0, 0.1), 0px 4px 7px 2px rgba(0, 0, 0, 0.1);
 }
   
   
@@ -91,7 +91,7 @@
 .offCanvas li {
     list-style: none;
     font-size: 14px;
-    padding: 10px 0px 10px 0px;
+    /* padding: 10px 0px 10px 0px; */
 }
   
 .offCanvas li i {
@@ -209,4 +209,131 @@
   .submenu a:hover {
     background: #b63b4d;
     color: #FFF;
+  }
+
+
+  .dropdown_variable {
+    display: none;
+    position: relative;
+    /* display: block; */
+    margin: 0 auto;
+    
+    color: #d9d9d9;
+    border-radius: 4px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1), 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .dropdown_variable li:hover:not(.title) {
+    cursor: pointer;
+    background: #39845e;
+    color: #FFF;
+    font-weight: bold;
+  }
+
+  .dropdown_variable li label {
+    cursor: pointer;
+    display: block;
+    line-height: 36px;
+    color: #d9d9d9;
+    padding-left: 44px;
+    -webkit-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+  }
+
+  .dropdown_variable li label > .var_color{
+    position: absolute;
+    display: inline-block;
+    left: 30px;
+    margin-top: 14px;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background-color: none;
+  }
+  
+  .dropdown_variable li label > span {
+    position: absolute;
+    display: inline-block;
+    left: 12px;
+    margin-top: 12px;
+    width: 12px;
+    height: 12px;
+    /* padding: 12px; */
+    /* padding-left: 42px; */
+    border: 1px solid #cfcfcf;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
+  
+  .dropdown_variable li label input {
+    display: none;
+  }
+  
+  .dropdown_variable li label input[type=checkbox] ~ span {
+    border-radius: 2px;
+  }
+  
+  .dropdown_variable li label input[type=radio]~ span {
+    border-radius: 100%;
+  }
+  
+  .dropdown_variable li label input[type=checkbox]:checked ~ span {
+    background-color: #81c483;
+    border: 1px solid #999;
+  }
+  
+  .dropdown_variable li label input[type=radio]:checked ~ span {
+    background-color: #81c483;
+    border: 1px solid #999;
+  }
+
+  .clear_filter{
+    text-align:center;
+    /* width:80px; */
+    cursor: pointer;
+    text-decoration:none;
+    color:#fff;
+    background-color:#444;
+    padding: 6px 12px;
+    font-size:small;
+    border-radius:5px;
+    display:block;
+    position:relative;
+    box-shadow: 3px 3px 11px 3px rgba(0, 0, 0, 0.1), 3px 1px 3px 1px rgba(0, 0, 0, 0.1);
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+  }
+
+  .clear_filter:hover{
+    background-color:#dc6767;
+  }
+  
+  .clear_filter:after{
+    width:0;
+    height:0;
+       border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 8px solid #444;
+      position: absolute;
+      content: '';
+      top: 23%;
+      right: 100%;
+      margin-left: -5px;
+  }
+  .clear_filter:hover::after{
+    border-right: 8px solid #dc6767;
+  }
+
+  .filter_devider{
+    width: 360px;
+    height: 15px;
+    /* background-color: #4D4D4D; */
+    /* position: absolute; */
+    display: inline-block;
   }
